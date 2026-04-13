@@ -54,5 +54,7 @@ class Client:
 
     def receive_answer(self):
         answer = list(self.connection.recv(1024))
+        if not answer:
+            return None
         print("GOT ANSWER", answer)
         return answer

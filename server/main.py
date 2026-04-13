@@ -1,6 +1,5 @@
 from client import Client
 import sys
-import random
 from socket import socket, AF_INET, SOCK_STREAM
 
 ADDRESS = (sys.argv[1], int(sys.argv[2]))
@@ -25,6 +24,8 @@ with socket(AF_INET, SOCK_STREAM) as sock:
 
             while True:
                 answer = client.receive_answer()
+                if not answer:
+                    break
                 correct = answers[client.puzzle]
 
                 if answer == correct:
