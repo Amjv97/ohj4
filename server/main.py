@@ -1,35 +1,61 @@
+import threading
 from client import Client
+import uvicorn
 import sys
 from socket import socket, AF_INET, SOCK_STREAM
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 
 ADDRESS = (sys.argv[1], int(sys.argv[2]))
 
 
-answers = {
-    0: [0, 1, 0, 0, 1, 0, 1, 1, 0],
-    # 1: [0, 1, 0, 0, 0, 0, 0, 1, 0],
-}
+def run_http():
+    app = FastAPI()
+
+    @app.get("/ok/{name}")
+    def image(name: str):
+        return FileResponse(f"assets/correct/{name}")
+
+    @app.get("/ei/{name}")
+    def image2(name: str):
+        return FileResponse(f"assets/incorrect/{name}")
+
+    uvicorn.run(app, host=ADDRESS[0], port=8000)
 
 
-with socket(AF_INET, SOCK_STREAM) as sock:
-    sock.bind(ADDRESS)
-    sock.listen()
+def run_tcp():
+    with socket(AF_INET, SOCK_STREAM) as sock:
+        sock.bind(ADDRESS)
+        sock.listen()
+        print("EEEEEEEEE")
 
-    while True:
-        connection, address = sock.accept()
-        with connection:
-            client = Client(connection, address)
+        while True:
+            connection, address = sock.accept()
+            with connection:
+                client = Client(connection, address)
 
-            client.send_puzzle_seed()
+                client.send_puzzle_seed()
 
-            while True:
-                answer = client.receive_answer()
-                if not answer:
-                    break
-                correct = answers[client.puzzle]
+                while True:
+                    answer = client.receive_answer()
+                    if not answer:
+                        break
+                    correct = client.answer
+                    print("CORRECT", correct)
 
-                if answer == correct:
-                    client.send_correct()
-                    break
-                else:
-                    client.send_incorrect()
+                    if set(answer) == set(correct):
+                        client.send_correct()
+                        break
+                    else:
+                        client.send_incorrect()
+
+
+if __name__ == "__main__":
+    t1 = threading.Thread(target=run_http)
+    t2 = threading.Thread(target=run_tcp)
+
+    t1.start()
+    t2.start()
+
+    t1.join()
+    t2.join()

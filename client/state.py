@@ -5,13 +5,18 @@ import flet as ft
 
 class State:
     def __init__(self):
-        self.selected = [0] * 9
+        self.selected = set()
         self.socket: socket = None  # ty:ignore[invalid-assignment]
         self.page: ft.Page = None  # ty:ignore[invalid-assignment]
         self.seed: int = None  # ty:ignore[invalid-assignment]
 
     def click(self, container, selection):
-        self.selected[selection] ^= 1
+
+        if selection in self.selected:
+            self.selected.remove(selection)
+        else:
+            self.selected.add(selection)
+        # self.selected[selection] ^= 1
         print(self.selected)
 
     def tarkista(self):
@@ -42,7 +47,7 @@ class State:
                 ft.TextButton("OK YRITÄN UUDELLEEN", on_click=self.hide_popup),
             ],
         )
-        self.selected = [0] * 9
+        self.selected = set()
         self.page.show_dialog(dialog)
 
     def info_popup(self):
@@ -63,4 +68,4 @@ class State:
         self.page.pop_dialog()
 
     def restart(self):
-        self.selected = [0] * 9
+        self.selected = set()

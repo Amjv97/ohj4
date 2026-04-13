@@ -1,7 +1,4 @@
-# import flet as ft
 from puzzles.picture_selection import picture_selection
-
-# from pulmat.tetris.main import tetris2
 import sys
 from socket import socket, AF_INET, SOCK_STREAM
 

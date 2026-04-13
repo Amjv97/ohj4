@@ -32,7 +32,14 @@ class Client:
         self.version = self.receive_version()
         self.puzzle = self.get_random_puzzle(self.version)
         self.seed = self.get_random_seed()
+        self.answer = self.get_answer()
         print("CLIENT CONNECTED", self.address)
+
+    def get_answer(self):
+        rng = random.Random(self.seed)
+        mount_politicans = rng.randint(1, 9)
+        politicans = rng.sample(range(1, 20 + 1), mount_politicans)
+        return set(politicans)
 
     def receive_version(self):
         version = int.from_bytes(self.connection.recv(1024))
@@ -42,6 +49,7 @@ class Client:
     def send_puzzle_seed(self):
         print("SEND PUZZLESEED", self.puzzle, self.seed)
         homma = self.puzzle.to_bytes(2) + self.seed.to_bytes(2)
+
         self.connection.sendall(homma)
 
     def send_correct(self):
