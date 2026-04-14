@@ -6,28 +6,25 @@ from socket import socket, AF_INET, SOCK_STREAM
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 
-ADDRESS = (sys.argv[1], int(sys.argv[2]))
+ADDRESS = sys.argv[1]
+PORT1 = int(sys.argv[2])
+PORT2 = int(sys.argv[3])
 
 
 def run_http():
     app = FastAPI()
 
-    @app.get("/ok/{name}")
+    @app.get("/assets/{name}")
     def image(name: str):
-        return FileResponse(f"assets/correct/{name}")
+        return FileResponse(f"assets/{name}")
 
-    @app.get("/ei/{name}")
-    def image2(name: str):
-        return FileResponse(f"assets/incorrect/{name}")
-
-    uvicorn.run(app, host=ADDRESS[0], port=8000)
+    uvicorn.run(app, host=ADDRESS, port=PORT2)
 
 
 def run_tcp():
     with socket(AF_INET, SOCK_STREAM) as sock:
-        sock.bind(ADDRESS)
+        sock.bind((ADDRESS, PORT1))
         sock.listen()
-        print("EEEEEEEEE")
 
         while True:
             connection, address = sock.accept()
@@ -41,7 +38,6 @@ def run_tcp():
                     if not answer:
                         break
                     correct = client.answer
-                    print("CORRECT", correct)
 
                     if set(answer) == set(correct):
                         client.send_correct()

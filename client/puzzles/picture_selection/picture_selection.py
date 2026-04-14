@@ -1,3 +1,6 @@
+import urllib
+import json
+import urllib.request
 import random
 from socket import socket
 import flet as ft
@@ -17,27 +20,33 @@ def run(sock: socket, seed: int):
     ft.run(main)
 
 
+ADDRESS = "127.0.0.1"
+PORT2 = 8000
+
+
 def main(page: ft.Page):
     rng = random.Random(state.seed)
-    mount_politicans = rng.randint(1, 9)
-    politicans = rng.sample(range(1, 20 + 1), mount_politicans)
-    nonpoliticans = rng.sample(range(1, 24 + 1), 9 - mount_politicans)
+
+    with urllib.request.urlopen(f"http://{ADDRESS}:{PORT2}/assets/assets.json") as url:
+        data = json.loads(url.read().decode())
+
+    a = data["picture_selection"]
+    correct = [int(i.replace(".jpg", "")) for i in a["correct"]]
+    incorrect = [int(i.replace(".jpg", "")) for i in a["incorrect"]]
+
+    politicans = rng.sample(correct + incorrect, 9)
+    print(politicans)
 
     state.page = page
-    ADDRESS = "127.0.0.1"
 
     page.title = "Flet counter example"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
     images = [
-        utils.make_buttons(state, f"http://{ADDRESS}:8000/ok/{i}.jpg", i)
+        utils.make_buttons(state, f"http://{ADDRESS}:{PORT2}/assets/{i}.jpg", i)
         for i in politicans
-    ] + [
-        utils.make_buttons(state, f"http://{ADDRESS}:8000/ei/{i}.jpg", i)
-        for i in nonpoliticans
     ]
 
-    print([f"{ADDRESS}:8000/ei/{i}.jpg" for i in nonpoliticans])
     random.shuffle(images)
 
     grid = ft.GridView(

@@ -1,10 +1,16 @@
+from enum import Enum
 from socket import socket
+import json
 import random
+
+
+class PUZZLE(Enum):
+    PICTURE_SELECTION = 0
 
 
 class Client:
     address: str
-    puzzle: int
+    puzzle: PUZZLE
     version: int
     seed: int
     connection: socket
@@ -14,17 +20,9 @@ class Client:
 
     def get_random_puzzle(self, version):
         match version:
-            case 1:
-                puzzles = 0
-            case 2:
-                puzzles = 0
-            case 3:
-                puzzles = 0
-            case 4:
-                puzzles = 0
             case _:
-                puzzles = 0
-        return random.randint(0, puzzles)
+                puzzles = [PUZZLE.PICTURE_SELECTION]
+        return random.sample(puzzles, 1)[0]
 
     def __init__(self, connection, address):
         self.connection = connection
@@ -37,9 +35,18 @@ class Client:
 
     def get_answer(self):
         rng = random.Random(self.seed)
-        mount_politicans = rng.randint(1, 9)
-        politicans = rng.sample(range(1, 20 + 1), mount_politicans)
-        return set(politicans)
+
+        with open("assets/assets.json", "r") as file:
+            data = json.load(file)
+
+        match self.puzzle:
+            case PUZZLE.PICTURE_SELECTION:
+                a = data["picture_selection"]
+                correct = [int(i.replace(".jpg", "")) for i in a["correct"]]
+                incorrect = [int(i.replace(".jpg", "")) for i in a["incorrect"]]
+                politicans = rng.sample(correct + incorrect, 9)
+                politicans = [i for i in politicans if i in correct]
+                return set(politicans)
 
     def receive_version(self):
         version = int.from_bytes(self.connection.recv(1024))
@@ -47,8 +54,8 @@ class Client:
         return version
 
     def send_puzzle_seed(self):
-        print("SEND PUZZLESEED", self.puzzle, self.seed)
-        homma = self.puzzle.to_bytes(2) + self.seed.to_bytes(2)
+        print("SEND PUZZLESEED", self.puzzle.value, self.seed)
+        homma = self.puzzle.value.to_bytes(2) + self.seed.to_bytes(2)
 
         self.connection.sendall(homma)
 
