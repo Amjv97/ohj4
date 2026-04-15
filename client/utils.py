@@ -1,19 +1,72 @@
-import flet as ft
+import json
+from functools import partial
+from state import State
+from urllib import request
+from flet import (
+    Button,
+    Column,
+    Control,
+    CrossAxisAlignment,
+    GestureDetector,
+    GridView,
+    Image,
+    MainAxisAlignment,
+    Row,
+    Text,
+    View,
+)
 
 
 def make_buttons(
-    state,
-    imagesrc,
-    imageid,
-):
-    image = ft.Image(
-        src=imagesrc,
-        width=100,
-        height=100,
+    state: State,
+    url: str,
+    id: int,
+) -> Control:
+    image = Image(url)
+    function = partial(state.click, id)
+    return GestureDetector(
+        content=image,
+        on_tap=function,
     )
-    container = ft.Container(content=image)
-    gdetector = ft.GestureDetector(
-        content=container,
-        on_tap=lambda x: state.click(imageid),
+
+
+def make_view(container: Column) -> View:
+    return View(
+        controls=[container],
+        vertical_alignment=MainAxisAlignment.CENTER,
     )
-    return gdetector
+
+
+def make_buttons_row(state: State) -> Row:
+    reset = Button("R", on_click=state.reset)
+    info = Button("I", on_click=state.show_popup_info)
+    verify = Button("Tarkista", on_click=state.verify_answer)
+    return Row(
+        alignment=MainAxisAlignment.CENTER,
+        controls=[reset, info, verify],
+    )
+
+
+def make_elements_column_grid(title: Text, grid: GridView, buttons: Row) -> Column:
+    return Column(
+        horizontal_alignment=CrossAxisAlignment.CENTER,
+        controls=[title, grid, buttons],
+    )
+
+
+def make_image_grid(images: list[Control]) -> GridView:
+    return GridView(
+        controls=images,
+        runs_count=3,
+        width=300,
+    )
+
+
+def get_images(state: State, files: list[int]) -> list[Control]:
+    return [make_buttons(state, state.get_url() + f"assets/{i}.jpg", i) for i in files]
+
+
+def read_assets(state: State) -> dict:
+    url = state.get_url() + "assets/assets.json"
+    with request.urlopen(url) as file:
+        return json.loads(file.read().decode())

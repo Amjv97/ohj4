@@ -37,6 +37,13 @@ class Client:
                 puzzles = [PUZZLE.PICTURE_SELECTION]
             case 1:
                 puzzles = [PUZZLE.PICTURE_SELECTION, PUZZLE.TETRIS]
+            case 2:
+                puzzles = [
+                    PUZZLE.PICTURE_SELECTION,
+                    PUZZLE.TETRIS,
+                    PUZZLE.TEXT_RECOGNITION,
+                    PUZZLE.SHAPE_RECOGNITION,
+                ]
             case _:
                 puzzles = list(PUZZLE)
         return random.choice(puzzles)

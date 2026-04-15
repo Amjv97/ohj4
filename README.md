@@ -1,11 +1,17 @@
 # TODO
 
 - loput puzzlet
+  - muuta VERSION=2
 - localization
 - UI/UX
-- exit codet
+- exit codet (pääsovellukselle signaali tuloksesta)
+- näkymäkohtainen info popup
 - kommentit
-- dokumentaatio
+- dokumentaatio (readmet)
 - error handling
 - clientistä puzzle:int -> puzzle:PUZZLE
-- clean utils.py, puzzles/*.py
+- parempi argumenttien parseaminen
+- scaling
+- asetusvalikko
+  - kieli (automaattisen tunnistuksen lisäksi)
+  - accessibility (pääsovelluksen signaalin lisäksi)
