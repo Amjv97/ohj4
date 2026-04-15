@@ -1,3 +1,4 @@
+import locale
 from pathlib import Path
 from collections.abc import Callable
 from flet import Page, AlertDialog, Text, TextButton
@@ -125,7 +126,21 @@ class State:
                 route = "/shape_recognition"
         asyncio.create_task(self.page.push_route(route))
 
+    def get_language(self) -> str:
+        local, _ = locale.getlocale()
+        local = local.split("_")[0] if local else "en"
+
+        locales_file = "translations/locales.json"
+        with open(locales_file, "r") as file:
+            locales = set(i.split(".")[0] for i in json.load(file).values())
+
+        if local not in locales:
+            local = "en"
+
+        return local
+
     def update_language(self) -> None:
+        self.language = self.get_language()
         locale = f"translations/{self.language}.json"
         locale_en = "translations/en.json"
 

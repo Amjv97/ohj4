@@ -12,5 +12,5 @@
 - parempi argumenttien parseaminen
 - scaling
 - asetusvalikko
-  - kieli (automaattisen tunnistuksen lisäksi)
+  - kieli
   - accessibility (pääsovelluksen signaalin lisäksi)

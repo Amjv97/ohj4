@@ -31,9 +31,8 @@ def app(page: Page) -> None:
     state.change_puzzle()
 
 
-def run(host: str, port: int, language: str, version: int) -> None:
+def run(host: str, port: int, version: int) -> None:
     state.host = host
-    state.language = language
     state.port = port
     state.version = version
     state.request_new_puzzle()
