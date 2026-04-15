@@ -1,4 +1,4 @@
-from fastapi import Request
+from fastapi import Request, HTTPException
 from puzzle import PUZZLE
 import random
 
@@ -45,7 +45,7 @@ class Client:
                     PUZZLE.SHAPE_RECOGNITION,
                 ]
             case _:
-                puzzles = list(PUZZLE)
+                raise HTTPException(status_code=400, detail="Unsupported version")
         return random.choice(puzzles)
 
     def get_random_seed(self) -> int:

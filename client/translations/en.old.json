@@ -1,7 +1,9 @@
 {
   "exception.puzzle.inexistent": "No puzzle or seed hath been provided by the server",
+  "exception.puzzle.invalid": "This puzzle is not valid",
   "exception.route.invalid": "This path is not valid",
   "exception.verification.inexistent": "No result hath been returned by the server",
+  "exception.verification.invalid": "An invalid result hath been provided by the server",
   "ui.button.verify": "Verify",
   "ui.popup.correct.button": "Return to the main application",
   "ui.popup.correct.title": "Thou art human ✔️",

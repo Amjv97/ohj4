@@ -7,10 +7,9 @@
 - näkymäkohtainen info popup
 - kommentit
 - dokumentaatio (readmet)
-- error handling
-- clientistä puzzle:int -> puzzle:PUZZLE
 - parempi argumenttien parseaminen
 - scaling
+- limited tries
 - asetusvalikko
   - kieli
   - accessibility (pääsovelluksen signaalin lisäksi)

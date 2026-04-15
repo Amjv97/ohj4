@@ -1,7 +1,9 @@
 {
   "exception.puzzle.inexistent": "Neniu puzlo aŭ semo estis provizita de la servilo",
+  "exception.puzzle.invalid": "Nevalida puzlo",
   "exception.route.invalid": "Nevalida vojo",
   "exception.verification.inexistent": "Neniu rezulto estis provizita de la servilo",
+  "exception.verification.invalid": "Nevalida rezulto provizita de la servilo",
   "ui.button.verify": "Kontroli",
   "ui.popup.correct.button": "Reen al la ĉefaplikaĵo",
   "ui.popup.correct.title": "Vi estas homo ✔️",

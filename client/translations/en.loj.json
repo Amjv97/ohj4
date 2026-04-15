@@ -1,7 +1,9 @@
 {
   "exception.puzzle.inexistent": "no puzlo .e no se samci cu se datni fi lo sevzi",
+  "exception.puzzle.invalid": "na validi puzlo",
   "exception.route.invalid": "na validi pluta",
   "exception.verification.inexistent": "no datni pe lo se zanru cu se renvi fi lo sevzi",
+  "exception.verification.invalid": "na validi se jalge poi se dunda lo sevzi",
   "ui.button.verify": "facki",
   "ui.popup.correct.button": "zutse pe lo bartu be lo nalgunka",
   "ui.popup.correct.title": "do remna ✔️",

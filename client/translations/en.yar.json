@@ -1,7 +1,9 @@
 {
   "exception.puzzle.inexistent": "No treasure riddle or seed be given by the ship",
+  "exception.puzzle.invalid": "That be a cursed puzzle",
   "exception.route.invalid": "That be a cursed route, matey",
   "exception.verification.inexistent": "No booty result returned by the ship",
+  "exception.verification.invalid": "That be a cursed result sent by the server",
   "ui.button.verify": "Check yer answer",
   "ui.popup.correct.button": "Back to the main deck",
   "ui.popup.correct.title": "Ye be human, arr! ✔️",

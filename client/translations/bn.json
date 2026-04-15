@@ -1,7 +1,9 @@
 {
   "exception.puzzle.inexistent": "সার্ভার কোনো পাজল/সিড প্রদান করেনি",
+  "exception.puzzle.invalid": "অবৈধ পাজল",
   "exception.route.invalid": "অবৈধ রুট",
   "exception.verification.inexistent": "সার্ভার কোনো ফলাফল প্রদান করেনি",
+  "exception.verification.invalid": "সার্ভার একটি অবৈধ ফলাফল প্রদান করেছে",
   "ui.button.verify": "যাচাই করুন",
   "ui.popup.correct.button": "প্রধান অ্যাপ্লিকেশনে ফিরে যান",
   "ui.popup.correct.title": "আপনি একজন মানুষ ✔️",

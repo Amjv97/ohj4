@@ -1,9 +1,10 @@
-import locale
-from pathlib import Path
 from collections.abc import Callable
 from flet import Page, AlertDialog, Text, TextButton
+from pathlib import Path
+from puzzle import PUZZLE
 import asyncio
 import json
+import locale
 import requests
 
 
@@ -12,7 +13,7 @@ class State:
     language: str
     page: Page
     port: int
-    puzzle: int
+    puzzle: PUZZLE
     refresh_ui: Callable
     seed: int
     selected: set
@@ -44,6 +45,8 @@ class State:
                 self.show_popup_correct()
             case "incorrect":
                 self.show_popup_incorrect()
+            case _:
+                raise Exception(self.texts["exception.verification.invalid"])
 
     def request_new_puzzle(self) -> None:
         url = self.get_url() + "get_puzzle"
@@ -53,7 +56,7 @@ class State:
         if not all(i in response for i in ["puzzle", "seed"]):
             raise Exception(self.texts["exception.puzzle.inexistent"])
 
-        self.puzzle = response["puzzle"]
+        self.puzzle = PUZZLE(response["puzzle"])
         self.seed = response["seed"]
         self.selected = set()
 
@@ -116,14 +119,16 @@ class State:
 
     def change_puzzle(self) -> None:
         match self.puzzle:
-            case 0:
+            case PUZZLE.PICTURE_SELECTION:
                 route = "/picture_selection"
-            case 1:
+            case PUZZLE.TETRIS:
                 route = "/tetris"
-            case 2:
+            case PUZZLE.TEXT_RECOGNITION:
                 route = "/text_recognition"
-            case 3:
+            case PUZZLE.SHAPE_RECOGNITION:
                 route = "/shape_recognition"
+            case _:
+                raise Exception(self.texts["exception.puzzle.invalid"])
         asyncio.create_task(self.page.push_route(route))
 
     def get_language(self) -> str:
