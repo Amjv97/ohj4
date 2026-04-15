@@ -1,0 +1,14 @@
+{
+  "exception.puzzle.inexistent": "no puzlo .e no se samci cu se datni fi lo sevzi",
+  "exception.route.invalid": "na validi pluta",
+  "exception.verification.inexistent": "no datni pe lo se zanru cu se renvi fi lo sevzi",
+  "ui.button.verify": "facki",
+  "ui.popup.correct.button": "zutse pe lo bartu be lo nalgunka",
+  "ui.popup.correct.title": "do remna ✔️",
+  "ui.popup.incorrect.button": "troci lo drata puzlo",
+  "ui.popup.incorrect.title": "u'u! troci zoi",
+  "ui.popup.info.button": "zutse pe lo puzlo",
+  "ui.popup.info.content": "TODO",
+  "ui.popup.info.title": "TODO",
+  "ui.puzzle.picture_selection.title": "cpacu lo pixra be lo jungo prenu"
+}

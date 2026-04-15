@@ -2,7 +2,6 @@
 
 - loput puzzlet
   - muuta VERSION=2
-- localization
 - UI/UX
 - exit codet (pääsovellukselle signaali tuloksesta)
 - näkymäkohtainen info popup

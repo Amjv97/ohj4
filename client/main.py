@@ -3,7 +3,8 @@ import sys
 
 HOST = sys.argv[1]
 PORT = int(sys.argv[2])
+LANGUAGE = "fi"
 VERSION = 0
 
 if __name__ == "__main__":
-    client.run(HOST, PORT, VERSION)
+    client.run(HOST, PORT, LANGUAGE, VERSION)

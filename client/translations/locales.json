@@ -1,0 +1,12 @@
+{
+  "bn.json": "বাংলা",
+  "en.json": "English",
+  "en.loj.json": "Lojban",
+  "en.old.json": "English (Old-school)",
+  "en.yar.json": "English (Pirate)",
+  "eo.json": "Esperanto",
+  "fi.json": "Suomi",
+  "mn.json": "монгол",
+  "se.json": "Davvisámegiella",
+  "sv.json": "Svenska"
+}

@@ -1,0 +1,14 @@
+{
+  "exception.puzzle.inexistent": "No puzzle or seed hath been provided by the server",
+  "exception.route.invalid": "This path is not valid",
+  "exception.verification.inexistent": "No result hath been returned by the server",
+  "ui.button.verify": "Verify",
+  "ui.popup.correct.button": "Return to the main application",
+  "ui.popup.correct.title": "Thou art human ✔️",
+  "ui.popup.incorrect.button": "Try another puzzle",
+  "ui.popup.incorrect.title": "Alas! Try once more",
+  "ui.popup.info.button": "Return to the puzzle",
+  "ui.popup.info.content": "TODO",
+  "ui.popup.info.title": "TODO",
+  "ui.puzzle.picture_selection.title": "Choose the images of politicians"
+}

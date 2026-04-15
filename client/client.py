@@ -21,7 +21,7 @@ def app(page: Page) -> None:
             case "/shape_recognition":
                 view = shape_recognition.get_view(state, page)
             case _:
-                raise Exception("Invalid route")
+                raise Exception(state.texts["exception.route.invalid"])
 
         page.views = [view]
         page.update()
@@ -31,9 +31,11 @@ def app(page: Page) -> None:
     state.change_puzzle()
 
 
-def run(host: str, port: int, version: int) -> None:
+def run(host: str, port: int, language: str, version: int) -> None:
     state.host = host
+    state.language = language
     state.port = port
     state.version = version
     state.request_new_puzzle()
+    state.update_language()
     flet.app(target=app)

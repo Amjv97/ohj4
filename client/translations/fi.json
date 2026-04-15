@@ -1,0 +1,14 @@
+{
+  "exception.puzzle.inexistent": "Palvelin ei palauttanut pulmaa tai siementä",
+  "exception.route.invalid": "Virheellinen reitti",
+  "exception.verification.inexistent": "Palvelin ei palauttanut tulosta",
+  "ui.button.verify": "Tarkista",
+  "ui.popup.correct.button": "Takaisin pääsovellukseen",
+  "ui.popup.correct.title": "Olet ihminen ✔️",
+  "ui.popup.incorrect.button": "Yritä toista pulmaa",
+  "ui.popup.incorrect.title": "Hups! Yritä vielä kerran",
+  "ui.popup.info.button": "Takaisin pulmaan",
+  "ui.popup.info.content": "TODO",
+  "ui.popup.info.title": "TODO",
+  "ui.puzzle.picture_selection.title": "Valitse kuvat poliitikoista"
+}

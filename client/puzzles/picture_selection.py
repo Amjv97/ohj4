@@ -22,7 +22,7 @@ def get_view(state: State, page: Page) -> View:
         politicans = get_politicans()
         images = utils.get_images(state, politicans)
 
-        title = Text("Valitse kuvat poliitikoista")
+        title = Text(state.texts["ui.puzzle.picture_selection.title"])
         grid = utils.make_image_grid(images)
         buttons = utils.make_buttons_row(state)
 

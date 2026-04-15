@@ -1,0 +1,14 @@
+{
+  "exception.puzzle.inexistent": "Serveris ii leat addán puzzlea/seed",
+  "exception.route.invalid": "Gustohis geaidnu",
+  "exception.verification.inexistent": "Serveris ii leat addán bohtosa",
+  "ui.button.verify": "Dárkkit",
+  "ui.popup.correct.button": "Ruovttoluotta váldoprorgamii",
+  "ui.popup.correct.title": "Don leat olbmo ✔️",
+  "ui.popup.incorrect.button": "Geahččal eará puzzlea",
+  "ui.popup.incorrect.title": "Ups! Geahččal fas",
+  "ui.popup.info.button": "Ruovttoluotta puzzlii",
+  "ui.popup.info.content": "TODO",
+  "ui.popup.info.title": "TODO",
+  "ui.puzzle.picture_selection.title": "Vállje govaid politihkkáriin"
+}

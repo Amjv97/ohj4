@@ -40,7 +40,7 @@ def make_view(container: Column) -> View:
 def make_buttons_row(state: State) -> Row:
     reset = Button("R", on_click=state.reset)
     info = Button("I", on_click=state.show_popup_info)
-    verify = Button("Tarkista", on_click=state.verify_answer)
+    verify = Button(state.texts["ui.button.verify"], on_click=state.verify_answer)
     return Row(
         alignment=MainAxisAlignment.CENTER,
         controls=[reset, info, verify],

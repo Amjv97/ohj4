@@ -1,0 +1,14 @@
+{
+  "exception.puzzle.inexistent": "Ingen pussel/seed tillhandahölls av servern",
+  "exception.route.invalid": "Ogiltig rutt",
+  "exception.verification.inexistent": "Inget resultat tillhandahölls av servern",
+  "ui.button.verify": "Verifiera",
+  "ui.popup.correct.button": "Tillbaka till huvudapplikationen",
+  "ui.popup.correct.title": "Du är mänsklig ✔️",
+  "ui.popup.incorrect.button": "Försök med ett annat pussel",
+  "ui.popup.incorrect.title": "Oj! Försök igen",
+  "ui.popup.info.button": "Tillbaka till pusslet",
+  "ui.popup.info.content": "TODO",
+  "ui.popup.info.title": "TODO",
+  "ui.puzzle.picture_selection.title": "Välj bilder på politiker"
+}

@@ -1,17 +1,21 @@
+from pathlib import Path
 from collections.abc import Callable
 from flet import Page, AlertDialog, Text, TextButton
 import asyncio
+import json
 import requests
 
 
 class State:
     host: str
+    language: str
     page: Page
     port: int
     puzzle: int
     refresh_ui: Callable
     seed: int
     selected: set
+    texts: dict[str, str]
     version: int
 
     def __init__(self) -> None:
@@ -32,7 +36,7 @@ class State:
         response = requests.post(url, json=data).json()
 
         if "result" not in response:
-            raise Exception("No result provided by the server")
+            raise Exception(self.texts["exception.verification.inexistent"])
 
         match response["result"]:
             case "correct":
@@ -46,7 +50,7 @@ class State:
         response = requests.post(url, json=data).json()
 
         if not all(i in response for i in ["puzzle", "seed"]):
-            raise Exception("No puzzle/seed provided by the server")
+            raise Exception(self.texts["exception.puzzle.inexistent"])
 
         self.puzzle = response["puzzle"]
         self.seed = response["seed"]
@@ -71,19 +75,19 @@ class State:
         self.page.show_dialog(dialog)
 
     def show_popup_correct(self) -> None:
-        title = "Olet ihminen ✔️"
-        button = "Takaisin pääsovellukseen"
+        title = self.texts["ui.popup.correct.title"]
+        button = self.texts["ui.popup.correct.button"]
         self.show_popup(self.exit, title, button)
 
     def show_popup_incorrect(self) -> None:
-        title = "Hups! Yritä vielä kerran"
-        button = "Yritä toista pulmaa"
+        title = self.texts["ui.popup.incorrect.title"]
+        button = self.texts["ui.popup.incorrect.button"]
         self.show_popup(self.hide_popup_reset, title, button)
 
     def show_popup_info(self) -> None:
-        title = "TODO"
-        content = "TODO"
-        button = "Takaisin pulmaan"
+        title = self.texts["ui.popup.info.title"]
+        content = self.texts["ui.popup.info.content"]
+        button = self.texts["ui.popup.info.button"]
         self.show_popup(self.hide_popup, title, button, content)
 
     async def exit(self) -> None:
@@ -120,3 +124,16 @@ class State:
             case 3:
                 route = "/shape_recognition"
         asyncio.create_task(self.page.push_route(route))
+
+    def update_language(self) -> None:
+        locale = f"translations/{self.language}.json"
+        locale_en = "translations/en.json"
+
+        # Add missing entries from the english locale as a backup
+        with open(locale_en, "r") as file:
+            self.texts = json.load(file)
+
+        # Only add the chosen locale on top if it exists
+        if Path(locale).exists():
+            with open(locale, "r") as file:
+                self.texts |= json.load(file)

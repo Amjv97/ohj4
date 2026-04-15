@@ -1,0 +1,14 @@
+{
+  "exception.puzzle.inexistent": "Neniu puzlo aŭ semo estis provizita de la servilo",
+  "exception.route.invalid": "Nevalida vojo",
+  "exception.verification.inexistent": "Neniu rezulto estis provizita de la servilo",
+  "ui.button.verify": "Kontroli",
+  "ui.popup.correct.button": "Reen al la ĉefaplikaĵo",
+  "ui.popup.correct.title": "Vi estas homo ✔️",
+  "ui.popup.incorrect.button": "Provu alian puzlon",
+  "ui.popup.incorrect.title": "Ho ve! Provu denove",
+  "ui.popup.info.button": "Reen al la puzlo",
+  "ui.popup.info.content": "TODO",
+  "ui.popup.info.title": "TODO",
+  "ui.puzzle.picture_selection.title": "Elektu bildojn de politikistoj"
+}

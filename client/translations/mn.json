@@ -1,0 +1,14 @@
+{
+  "exception.puzzle.inexistent": "Серверээс даалгавар/seed өгөгдөөгүй байна",
+  "exception.route.invalid": "Буруу зам",
+  "exception.verification.inexistent": "Серверээс үр дүн өгөгдөөгүй байна",
+  "ui.button.verify": "Шалгах",
+  "ui.popup.correct.button": "Үндсэн програм руу буцах",
+  "ui.popup.correct.title": "Та хүн байна ✔️",
+  "ui.popup.incorrect.button": "Өөр даалгавар оролдох",
+  "ui.popup.incorrect.title": "Ашгүй! Дахин оролдоно уу",
+  "ui.popup.info.button": "Даалгавар руу буцах",
+  "ui.popup.info.content": "TODO",
+  "ui.popup.info.title": "TODO",
+  "ui.puzzle.picture_selection.title": "Улстөрчдийн зургийг сонгоно уу"
+}
