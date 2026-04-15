@@ -35,6 +35,8 @@ class Client:
         match self.version:
             case 0:
                 puzzles = [PUZZLE.PICTURE_SELECTION]
+            case 1:
+                puzzles = [PUZZLE.PICTURE_SELECTION, PUZZLE.TETRIS]
             case _:
                 puzzles = list(PUZZLE)
         return random.choice(puzzles)

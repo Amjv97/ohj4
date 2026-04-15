@@ -1,95 +1,122 @@
-import requests
+from collections.abc import Callable
 from flet import Page, AlertDialog, Text, TextButton
-from socket import socket
+import asyncio
+import requests
 
 
 class State:
-    def __init__(self):
-        self.selected = set()
-        self.socket: socket = None  # ty:ignore[invalid-assignment]
-        self.page: Page = None  # ty:ignore[invalid-assignment]
-        self.seed: int = None  # ty:ignore[invalid-assignment]
-        self.refresh_ui = None
-        self.host = None
-        self.port = None
+    host: str
+    page: Page
+    port: int
+    puzzle: int
+    refresh_ui: Callable
+    seed: int
+    selected: set
+    version: int
 
-    def click(self, container, selection):
+    def __init__(self) -> None:
+        self.selected = set()
+
+    def get_url(self) -> str:
+        return f"http://{self.host}:{self.port}/"
+
+    def click(self, selection: int) -> None:
         if selection in self.selected:
             self.selected.remove(selection)
         else:
             self.selected.add(selection)
-        print("selection:", self.selected)
 
-    def tarkista(self):
-        url = f"http://{self.host}:{self.port}/verify_answer"
+    def verify_answer(self) -> None:
+        url = self.get_url() + "verify_answer"
         data = {"answer": list(self.selected)}
-        response = requests.post(url, json=data)
+        response = requests.post(url, json=data).json()
 
-        result = response.json()["result"]
-        match result:
+        if "result" not in response:
+            raise Exception("No result provided by the server")
+
+        match response["result"]:
             case "correct":
-                self.show_popup()
+                self.show_popup_correct()
             case "incorrect":
-                self.show_popup_uudelleen()
+                self.show_popup_incorrect()
 
+    def request_new_puzzle(self) -> None:
+        url = self.get_url() + "get_puzzle"
+        data = {"version": self.version}
+        response = requests.post(url, json=data).json()
 
-    def show_popup(self):
-        dialog = AlertDialog(
-            title=Text("Aivan oikein!!!"),
-            content=Text("lorem ipsum"),
-            actions=[
-                TextButton("EXIT", on_click=self.close_window),
-            ],
-        )
-        self.page.show_dialog(dialog)
+        if not all(i in response for i in ["puzzle", "seed"]):
+            raise Exception("No puzzle/seed provided by the server")
 
-    def show_popup_uudelleen(self):
-        dialog = AlertDialog(
-            title=Text("väärin meni"),
-            content=Text("lorem ipsum"),
-            actions=[
-                TextButton("OK YRITÄN UUDELLEEN", on_click=self.hide_popup_reset),
-            ],
-        )
+        self.puzzle = response["puzzle"]
+        self.seed = response["seed"]
         self.selected = set()
-        self.page.show_dialog(dialog)
 
-    def info_popup(self):
+    def show_popup(
+        self,
+        function: Callable,
+        title_text: str,
+        button_text: str,
+        content_text: str | None = None,
+    ) -> None:
+        title = Text(title_text)
+        content = Text(content_text) if content_text else None
+        action = TextButton(button_text, on_click=function)
         dialog = AlertDialog(
-            title=Text("info"),
-            content=Text("lorem ipsum"),
-            actions=[
-                TextButton("OK TAKAISIN", on_click=self.hide_popup),
-            ],
+            title=title,
+            content=content,
+            actions=[action],
         )
+
         self.page.show_dialog(dialog)
 
-    async def close_window(self):
+    def show_popup_correct(self) -> None:
+        title = "Olet ihminen ✔️"
+        button = "Takaisin pääsovellukseen"
+        self.show_popup(self.exit, title, button)
+
+    def show_popup_incorrect(self) -> None:
+        title = "Hups! Yritä vielä kerran"
+        button = "Yritä toista pulmaa"
+        self.show_popup(self.hide_popup_reset, title, button)
+
+    def show_popup_info(self) -> None:
+        title = "TODO"
+        content = "TODO"
+        button = "Takaisin pulmaan"
+        self.show_popup(self.hide_popup, title, button, content)
+
+    async def exit(self) -> None:
         await self.page.window.close()
 
-    def hide_popup(self):
+    def hide_popup(self) -> None:
         self.page.pop_dialog()
 
-    def hide_popup_reset(self):
-        self.restart()
-        self.page.pop_dialog()
+    def hide_popup_reset(self) -> None:
+        self.reset()
+        self.hide_popup()
 
-    def restart(self):
+    def reset(self) -> None:
+        puzzle_old = self.puzzle
         self.request_new_puzzle()
-        self.selected = set()
-        self.refresh_ui()  # ty:ignore[call-non-callable]
 
-    def request_new_puzzle(self):
-        url = f"http://{self.host}:{self.port}/get_puzzle"
-        data = {"version": 0}
-        response = requests.post(url, json=data)
-        puzzle = response.json()["puzzle"]
-        self.seed = response.json()["seed"]
-        self.goto_puzzle(self.page, puzzle)
+        if puzzle_old == self.puzzle:
+            # We need to refresh, since the new seed needs to be taken into account
+            # We don't need to change the puzzle, since that's already done by refreshing
+            self.refresh_ui()
+        else:
+            # UI doesn't need to be refreshed for some reason if the puzzle changes
+            # Otherwise the puzzle gets loaded twice
+            self.change_puzzle()
 
-    def goto_puzzle(self, page, puzzle):
-        match puzzle:
+    def change_puzzle(self) -> None:
+        match self.puzzle:
             case 0:
-                page.go("/picture")
+                route = "/picture_selection"
             case 1:
-                page.go("/other")
+                route = "/tetris"
+            case 2:
+                route = "/text_recognition"
+            case 3:
+                route = "/shape_recognition"
+        asyncio.create_task(self.page.push_route(route))

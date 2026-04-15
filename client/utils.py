@@ -14,6 +14,6 @@ def make_buttons(
     container = ft.Container(content=image)
     gdetector = ft.GestureDetector(
         content=container,
-        on_tap=lambda x: state.click(container, imageid),
+        on_tap=lambda x: state.click(imageid),
     )
     return gdetector

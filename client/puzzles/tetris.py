@@ -50,7 +50,7 @@ def get_view(state, page: Page) -> View:
         )
 
         text = Text(
-            value="Valitse kuvat poliitikoista",
+            value="Valitse kuvat OOOOOOOOOOOOO",
             text_align=TextAlign.CENTER,
         )
 
