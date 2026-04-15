@@ -21,17 +21,17 @@ class State:
         print("selection:", self.selected)
 
     def tarkista(self):
-        url = f"http://{self.host}:{self.port}/set_answer"
+        url = f"http://{self.host}:{self.port}/verify_answer"
         data = {"answer": list(self.selected)}
         response = requests.post(url, json=data)
 
-        status = response.json()["status"]
-        match status:
-            case "discarded":
+        result = response.json()["result"]
+        match result:
+            case "correct":
+                self.show_popup()
+            case "incorrect":
                 self.show_popup_uudelleen()
 
-            case "accepted":
-                self.show_popup()
 
     def show_popup(self):
         dialog = AlertDialog(

@@ -1,102 +1,61 @@
-import json
-from random import Random
-import random
-from enum import Enum
-import uvicorn
+from puzzle import PUZZLE
+from client import Clients
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import FileResponse
-from fastapi import FastAPI, Request
+from random import Random
+import json
+import uvicorn
 
-clients: dict[str, Client] = {}
-
-
-class PUZZLE(Enum):
-    PICTURE_SELECTION = 0
-    TETRIS = 1
-    TEXT_RECOGNITION = 2
-    SHAPE_RECOGNITION = 3
+clients = Clients()
 
 
-class Client:
-    puzzle: PUZZLE
-    version: int
-    seed: int
-
-
-def get_random_puzzle(version):
-    match version:
-        case 0:
-            puzzles = [PUZZLE.PICTURE_SELECTION]
-        case _:
-            puzzles = list(PUZZLE)
-    return random.choice(puzzles)
-
-
-def get_random_seed():
-    return random.randint(0, 65535)
-
-
-def add_client(host: str, data: dict) -> None:
-    version = data["version"]
-    puzzle = get_random_puzzle(version)
-    seed = get_random_seed()
-
-    client = Client()
-    client.puzzle = puzzle
-    client.seed = seed
-    client.version = version
-    clients[host] = client
+def read_assets() -> dict:
+    with open("assets/assets.json", "r") as file:
+        return json.load(file)
 
 
 def run(host: str, port: int) -> None:
     app = FastAPI()
+    assets = read_assets()
 
-    @app.get("/assets/{name}")
-    def image(name: str):
-        return FileResponse(f"assets/{name}")
+    @app.get("/assets/{file}")
+    def get_assets(file: str) -> FileResponse:
+        return FileResponse(f"assets/{file}")
 
     @app.post("/get_puzzle")
-    def get_puzzle(request: Request, data: dict):
-        host = request.client.host
-
-        add_client(host, data)
-        client = clients[host]
-
+    def post_get_puzzle(request: Request, data: dict) -> dict:
+        client = clients.add_client(request, data)
         return {
             "puzzle": client.puzzle,
             "seed": client.seed,
         }
 
-    @app.post("/set_answer")
-    def process(request: Request, data2: dict):
-        print("set answer for her")
-        host = request.client.host
+    @app.post("/verify_answer")
+    def post_verify_answer(request: Request, data: dict) -> dict:
+        client = clients.get_client(request)
+        if not client:
+            raise HTTPException(
+                status_code=400, detail="Client hasn't requested a puzzle"
+            )
 
-        if host not in clients:
-            print("FUCK")
-            return {"status": "error"}
-        client = clients[host]
+        answer_correct = get_answer_correct(client.puzzle, client.seed)
+        answer_proposal = get_answer_proposal(data)
 
-        rng = Random(client.seed)
+        result = "correct" if answer_proposal == answer_correct else "incorrect"
+        return {"result": result}
 
-        with open("assets/assets.json", "r") as file:
-            data = json.load(file)
+    def get_answer_correct(puzzle: PUZZLE, seed: int) -> set:
+        rng = Random(seed)
 
-        answer = None
-        match client.puzzle:
+        match puzzle:
             case _:
-                a = data["picture_selection"]
-                correct = [int(i.replace(".jpg", "")) for i in a["correct"]]
-                incorrect = [int(i.replace(".jpg", "")) for i in a["incorrect"]]
-                politicans = rng.sample(correct + incorrect, 9)
-                politicans = [i for i in politicans if i in correct]
-                answer = set(politicans)
+                files = assets["picture_selection"]
+                correct = [int(i.split(".")[0]) for i in files["correct"]]
+                incorrect = [int(i.split(".")[0]) for i in files["incorrect"]]
+                options = rng.sample(correct + incorrect, 9)
+                return set(i for i in options if i in correct)
 
-        proposed=set(data2["answer"])
-        answer=set(answer)
-        print(proposed,answer)
-        if proposed == set(answer):
-            return {"status": "accepted"}
-        else:
-            return {"status": "discarded"}
+    def get_answer_proposal(data: dict) -> set | None:
+        return set(data["answer"]) if "answer" in data else None
 
     uvicorn.run(app, host=host, port=port)
