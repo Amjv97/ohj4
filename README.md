@@ -7,7 +7,6 @@
 - näkymäkohtainen info popup
 - kommentit
 - dokumentaatio (readmet)
-- parempi argumenttien parseaminen
 - scaling
 - limited tries
 - asetusvalikko

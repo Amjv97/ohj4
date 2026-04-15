@@ -1,8 +1,6 @@
 import server
-import sys
-
-HOST = sys.argv[1]
-PORT = int(sys.argv[2])
+import arguments
 
 if __name__ == "__main__":
-    server.run(HOST, PORT)
+    host, port = arguments.parse()
+    server.run(host, port)

@@ -144,8 +144,8 @@ class State:
 
         return local
 
-    def update_language(self) -> None:
-        self.language = self.get_language()
+    def update_language(self, language: str | None) -> None:
+        self.language = language or self.get_language()
         locale = f"translations/{self.language}.json"
         locale_en = "translations/en.json"
 

@@ -31,10 +31,10 @@ def app(page: Page) -> None:
     state.change_puzzle()
 
 
-def run(host: str, port: int, version: int) -> None:
+def run(host: str, port: int, language: str | None, version: int) -> None:
     state.host = host
     state.port = port
     state.version = version
     state.request_new_puzzle()
-    state.update_language()
+    state.update_language(language)
     flet.app(target=app)
