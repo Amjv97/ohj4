@@ -8,6 +8,7 @@ class State:
         self.socket: socket = None  # ty:ignore[invalid-assignment]
         self.page: Page = None  # ty:ignore[invalid-assignment]
         self.seed: int = None  # ty:ignore[invalid-assignment]
+        self.refresh_ui = None
 
     def click(self, container, selection):
         if selection in self.selected:
@@ -39,7 +40,7 @@ class State:
             title=Text("väärin meni"),
             content=Text("lorem ipsum"),
             actions=[
-                TextButton("OK YRITÄN UUDELLEEN", on_click=self.hide_popup),
+                TextButton("OK YRITÄN UUDELLEEN", on_click=self.hide_popup_reset),
             ],
         )
         self.selected = set()
@@ -50,7 +51,7 @@ class State:
             title=Text("info"),
             content=Text("lorem ipsum"),
             actions=[
-                TextButton("OK YRITÄN UUDELLEEN", on_click=self.hide_popup),
+                TextButton("OK TAKAISIN", on_click=self.hide_popup),
             ],
         )
         self.page.show_dialog(dialog)
@@ -61,14 +62,30 @@ class State:
     def hide_popup(self):
         self.page.pop_dialog()
 
-    def restart(self):
-        # self.request_new_puzzle()
-        self.selected = set()
+    def hide_popup_reset(self):
+        self.restart()
+        self.page.pop_dialog()
 
-    # def request_new_puzzle(self):
-    #     o = 0
-    #     self.socket.sendall(o.to_bytes())
-    #     data = self.socket.recv(1024)
-    #     puzzle = int.from_bytes(data[0:2])
-    #     self.seed = int.from_bytes(data[2:4])
-    #     self.page
+    def restart(self):
+        print("aaaaaaaaaaaa")
+        self.request_new_puzzle()
+        self.selected = set()
+        self.refresh_ui()  # ty:ignore[call-non-callable]
+
+    def request_new_puzzle(self):
+        o = 0
+        self.socket.sendall(o.to_bytes())
+        data = self.socket.recv(1024)
+        print(0, self.seed)
+        puzzle = int.from_bytes(data[0:2])
+        self.seed = int.from_bytes(data[2:4])
+        print(puzzle, self.seed)
+        self.goto_puzzle(self.page, puzzle)
+        # self.page.go()
+
+    def goto_puzzle(self, page, puzzle):
+        match puzzle:
+            case 0:
+                page.go("/picture")
+            case 1:
+                page.go("/other")

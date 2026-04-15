@@ -6,6 +6,7 @@ import random
 
 class PUZZLE(Enum):
     PICTURE_SELECTION = 0
+    PICTURE_SELECTION2 = 1
 
 
 class Client:
@@ -21,7 +22,7 @@ class Client:
     def get_random_puzzle(self, version):
         match version:
             case _:
-                puzzles = [PUZZLE.PICTURE_SELECTION]
+                puzzles = [PUZZLE.PICTURE_SELECTION, PUZZLE.PICTURE_SELECTION2]
         return random.sample(puzzles, 1)[0]
 
     def __init__(self, connection, address):
@@ -47,11 +48,24 @@ class Client:
                 politicans = rng.sample(correct + incorrect, 9)
                 politicans = [i for i in politicans if i in correct]
                 return set(politicans)
+            case PUZZLE.PICTURE_SELECTION2:
+                a = data["picture_selection"]
+                correct = [int(i.replace(".jpg", "")) for i in a["correct"]]
+                incorrect = [int(i.replace(".jpg", "")) for i in a["incorrect"]]
+                politicans = rng.sample(correct + incorrect, 9)
+                politicans = [i for i in politicans if i in correct]
+                return set(politicans)
 
     def receive_version(self):
         version = int.from_bytes(self.connection.recv(1024))
         print("RECEIVED VERSION", version)
         return version
+
+    def reset(self):
+        self.puzzle = self.get_random_puzzle(self.version)
+        self.seed = self.get_random_seed()
+        self.answer = self.get_answer()
+        print(self.answer)
 
     def send_puzzle_seed(self):
         print("SEND PUZZLESEED", self.puzzle.value, self.seed)

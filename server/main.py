@@ -37,8 +37,10 @@ def run_tcp():
                     answer = client.receive_answer()
                     if not answer:
                         break
-                    if len(answer)==0 and answer[0]==0:
-                        #requesting new puzzle
+                    print(answer)
+                    if len(answer) == 1 and answer[0] == 0:
+                        client.reset()
+                        # requesting new puzzle
                         client.send_puzzle_seed()
                         continue
                     correct = client.answer

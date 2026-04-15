@@ -21,3 +21,5 @@ with socket(AF_INET, SOCK_STREAM) as sock:
     match puzzle:
         case 0:
             picture_selection.run(sock, seed)
+        case 1:
+            picture_selection.run(sock, seed)

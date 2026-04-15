@@ -5,7 +5,6 @@ from random import Random
 from urllib import request
 from socket import socket
 from state import State
-from pathlib import Path
 from flet import (
     GridView,
     Text,
@@ -19,9 +18,8 @@ from flet import (
     Page,
 )
 
-BASE_DIR = Path(__file__).resolve().parent
 ADDRESS = "127.0.0.1"
-PORT2 = 8000
+PORT2 = 8001
 
 state = State()
 
@@ -32,7 +30,7 @@ def run(sock: socket, seed: int):
     ft.app(target=main)
 
 
-def main(page: Page):
+async def main(page: Page):
     state.page = page
 
     def view_pop(e):
@@ -44,6 +42,8 @@ def main(page: Page):
         page.views.clear()
         if page.route == "/picture":
             page.views.append(get_view(page))
+        elif page.route == "/other":
+            page.views.append(get_view(page))
         page.update()
 
     page.on_route_change = route_change
@@ -52,53 +52,63 @@ def main(page: Page):
 
 
 def get_view(page: Page):
-    rng = Random(state.seed)
+    container = ft.Column()
 
-    with request.urlopen(f"http://{ADDRESS}:{PORT2}/assets/assets.json") as url:
-        data = json.loads(url.read().decode())
+    def build_puzzle():
+        print(f"Building puzzle with seed: {state.seed}")
+        container.controls.clear()
 
-    pictures = data["picture_selection"]
-    correct = [int(i.replace(".jpg", "")) for i in pictures["correct"]]
-    incorrect = [int(i.replace(".jpg", "")) for i in pictures["incorrect"]]
-    politicans = rng.sample(correct + incorrect, 9)
+        rng = Random(state.seed)
 
-    print("politicans:", politicans)
+        with request.urlopen(f"http://{ADDRESS}:{PORT2}/assets/assets.json") as url:
+            data = json.loads(url.read().decode())
 
-    images = [
-        utils.make_buttons(state, f"http://{ADDRESS}:{PORT2}/assets/{i}.jpg", i)
-        for i in politicans
-    ]
+        pictures = data["picture_selection"]
+        correct = [int(i.replace(".jpg", "")) for i in pictures["correct"]]
+        incorrect = [int(i.replace(".jpg", "")) for i in pictures["incorrect"]]
+        politicans = rng.sample(correct + incorrect, 9)
 
-    grid = GridView(
-        runs_count=3,
-        width=300,
-        spacing=20,
-        controls=images,
-    )
+        print("politicans:", politicans)
 
-    text = Text(
-        value="Valitse kuvat poliitikoista",
-        text_align=TextAlign.CENTER,
-    )
+        images = [
+            utils.make_buttons(state, f"http://{ADDRESS}:{PORT2}/assets/{i}.jpg", i)
+            for i in politicans
+        ]
+        grid = GridView(
+            runs_count=3,
+            width=300,
+            spacing=20,
+            controls=images,
+        )
 
-    buttons = Row(
-        alignment=MainAxisAlignment.CENTER,
-        controls=[
-            Button("rest", on_click=state.restart),
-            Button("info", on_click=state.info_popup),
-            Button("Tarkista", on_click=state.tarkista),
-        ],
-    )
+        text = Text(
+            value="Valitse kuvat poliitikoista",
+            text_align=TextAlign.CENTER,
+        )
 
-    column = Column(
-        horizontal_alignment=CrossAxisAlignment.CENTER,
-        alignment=MainAxisAlignment.CENTER,
-        controls=[text, grid, buttons],
-    )
+        buttons = Row(
+            alignment=MainAxisAlignment.CENTER,
+            controls=[
+                Button("rest", on_click=state.restart),
+                Button("info", on_click=state.info_popup),
+                Button("Tarkista", on_click=state.tarkista),
+            ],
+        )
 
+        column = Column(
+            horizontal_alignment=CrossAxisAlignment.CENTER,
+            alignment=MainAxisAlignment.CENTER,
+            controls=[text, grid, buttons],
+        )
+
+        container.controls.extend([column])
+        page.update()
+
+    build_puzzle()
+    state.refresh_ui = build_puzzle
     return View(
         route="/picture",
-        controls=[column],
+        controls=[container],
         vertical_alignment=MainAxisAlignment.CENTER,
         horizontal_alignment=CrossAxisAlignment.CENTER,
     )
