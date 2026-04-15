@@ -1,3 +1,4 @@
+import requests
 from flet import Page, AlertDialog, Text, TextButton
 from socket import socket
 
@@ -9,6 +10,8 @@ class State:
         self.page: Page = None  # ty:ignore[invalid-assignment]
         self.seed: int = None  # ty:ignore[invalid-assignment]
         self.refresh_ui = None
+        self.host = None
+        self.port = None
 
     def click(self, container, selection):
         if selection in self.selected:
@@ -18,12 +21,17 @@ class State:
         print("selection:", self.selected)
 
     def tarkista(self):
-        self.socket.sendall(bytes(self.selected))
-        iscorrect = int.from_bytes(self.socket.recv(1024)) == 1
-        if iscorrect:
-            self.show_popup()
-        else:
-            self.show_popup_uudelleen()
+        url = f"http://{self.host}:{self.port}/set_answer"
+        data = {"answer": list(self.selected)}
+        response = requests.post(url, json=data)
+
+        status = response.json()["status"]
+        match status:
+            case "discarded":
+                self.show_popup_uudelleen()
+
+            case "accepted":
+                self.show_popup()
 
     def show_popup(self):
         dialog = AlertDialog(
@@ -67,21 +75,17 @@ class State:
         self.page.pop_dialog()
 
     def restart(self):
-        print("aaaaaaaaaaaa")
         self.request_new_puzzle()
         self.selected = set()
         self.refresh_ui()  # ty:ignore[call-non-callable]
 
     def request_new_puzzle(self):
-        o = 0
-        self.socket.sendall(o.to_bytes())
-        data = self.socket.recv(1024)
-        print(0, self.seed)
-        puzzle = int.from_bytes(data[0:2])
-        self.seed = int.from_bytes(data[2:4])
-        print(puzzle, self.seed)
+        url = f"http://{self.host}:{self.port}/get_puzzle"
+        data = {"version": 0}
+        response = requests.post(url, json=data)
+        puzzle = response.json()["puzzle"]
+        self.seed = response.json()["seed"]
         self.goto_puzzle(self.page, puzzle)
-        # self.page.go()
 
     def goto_puzzle(self, page, puzzle):
         match puzzle:

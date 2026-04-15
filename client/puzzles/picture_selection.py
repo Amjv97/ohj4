@@ -3,7 +3,6 @@ import flet as ft
 import utils
 from random import Random
 from urllib import request
-from socket import socket
 from state import State
 from flet import (
     GridView,
@@ -18,14 +17,13 @@ from flet import (
     Page,
 )
 
-ADDRESS = "127.0.0.1"
-PORT2 = 8001
 
 state = State()
 
 
-def run(sock: socket, seed: int):
-    state.socket = sock
+def run(host, port, seed: int):
+    state.host = host
+    state.port = port
     state.seed = seed
     ft.app(target=main)
 
@@ -55,12 +53,13 @@ def get_view(page: Page):
     container = ft.Column()
 
     def build_puzzle():
-        print(f"Building puzzle with seed: {state.seed}")
         container.controls.clear()
 
         rng = Random(state.seed)
 
-        with request.urlopen(f"http://{ADDRESS}:{PORT2}/assets/assets.json") as url:
+        with request.urlopen(
+            f"http://{state.host}:{state.port}/assets/assets.json"
+        ) as url:
             data = json.loads(url.read().decode())
 
         pictures = data["picture_selection"]
@@ -71,7 +70,9 @@ def get_view(page: Page):
         print("politicans:", politicans)
 
         images = [
-            utils.make_buttons(state, f"http://{ADDRESS}:{PORT2}/assets/{i}.jpg", i)
+            utils.make_buttons(
+                state, f"http://{state.host}:{state.port}/assets/{i}.jpg", i
+            )
             for i in politicans
         ]
         grid = GridView(
