@@ -2,7 +2,6 @@
 
 - loput puzzlet
 - UI/UX
-- exit codet (pääsovellukselle signaali tuloksesta)
 - näkymäkohtainen info popup
 - kommentit
 - dokumentaatio (readmet)

@@ -15,6 +15,7 @@ class State:
     port: int
     puzzle: PUZZLE
     refresh_ui: Callable
+    result: bool
     seed: int
     selected: set
     texts: dict[str, str]
@@ -22,6 +23,7 @@ class State:
 
     def __init__(self) -> None:
         self.selected = set()
+        self.result = False
 
     def get_url(self) -> str:
         return f"http://{self.host}:{self.port}/"
@@ -45,6 +47,7 @@ class State:
 
         match response["result"]:
             case "correct":
+                self.result = True
                 self.show_popup_correct()
             case "incorrect":
                 self.show_popup_incorrect()
