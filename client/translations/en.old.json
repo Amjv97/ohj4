@@ -10,6 +10,7 @@
   "ui.popup.correct.title": "Thou art human ✔️",
   "ui.popup.incorrect.button": "Try another puzzle",
   "ui.popup.incorrect.title": "Alas! Try once more",
+  "ui.popup.incorrect.title.last": "That was thy final chance. It is now wholly over for thee",
   "ui.popup.info.button": "Return to the puzzle",
   "ui.popup.info.content": "TODO",
   "ui.popup.info.title": "TODO",

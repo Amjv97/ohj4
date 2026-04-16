@@ -10,6 +10,7 @@
   "ui.popup.correct.title": "আপনি একজন মানুষ ✔️",
   "ui.popup.incorrect.button": "আরেকটি পাজল চেষ্টা করুন",
   "ui.popup.incorrect.title": "উফ! আবার চেষ্টা করুন",
+  "ui.popup.incorrect.title.last": "ওটাই ছিল তোমার শেষ সুযোগ। এখন তোমার জন্য সব শেষ।",
   "ui.popup.info.button": "পাজলে ফিরে যান",
   "ui.popup.info.content": "TODO",
   "ui.popup.info.title": "TODO",

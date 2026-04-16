@@ -10,6 +10,7 @@
   "ui.popup.correct.title": "Та хүн байна ✔️",
   "ui.popup.incorrect.button": "Өөр даалгавар оролдох",
   "ui.popup.incorrect.title": "Ашгүй! Дахин оролдоно уу",
+  "ui.popup.incorrect.title.last": "Тэр бол чиний сүүлчийн боломж байсан. Одоо чиний хувьд бүх зүйл дууссан",
   "ui.popup.info.button": "Даалгавар руу буцах",
   "ui.popup.info.content": "TODO",
   "ui.popup.info.title": "TODO",

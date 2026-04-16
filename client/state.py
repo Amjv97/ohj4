@@ -16,14 +16,16 @@ class State:
     puzzle: PUZZLE
     refresh_ui: Callable
     result: bool
+    retries: int
     seed: int
     selected: set
     texts: dict[str, str]
     version: int
 
-    def __init__(self) -> None:
+    def __init__(self, retries: int = 3) -> None:
         self.selected = set()
         self.result = False
+        self.retries = retries
 
     def get_url(self) -> str:
         return f"http://{self.host}:{self.port}/"
@@ -50,6 +52,7 @@ class State:
                 self.result = True
                 self.show_popup_correct()
             case "incorrect":
+                self.retries -= 1
                 self.show_popup_incorrect()
             case _:
                 raise Exception(self.texts["exception.verification.invalid"])
@@ -93,9 +96,18 @@ class State:
         self.show_popup(self.exit, title, button)
 
     def show_popup_incorrect(self) -> None:
-        title = self.texts["ui.popup.incorrect.title"]
-        button = self.texts["ui.popup.incorrect.button"]
-        self.show_popup(self.hide_popup_reset, title, button)
+        if self.retries > 0:
+            title_path = "ui.popup.incorrect.title"
+            button_path = "ui.popup.incorrect.button"
+            function = self.hide_popup_reset
+        else:
+            title_path = "ui.popup.incorrect.title.last"
+            button_path = "ui.popup.correct.button"
+            function = self.exit
+
+        title = self.texts[title_path]
+        button = self.texts[button_path]
+        self.show_popup(function, title, button)
 
     def show_popup_info(self) -> None:
         title = self.texts["ui.popup.info.title"]

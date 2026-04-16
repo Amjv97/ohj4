@@ -10,6 +10,7 @@
   "ui.popup.correct.title": "Du är mänsklig ✔️",
   "ui.popup.incorrect.button": "Försök med ett annat pussel",
   "ui.popup.incorrect.title": "Oj! Försök igen",
+  "ui.popup.incorrect.title.last": "Det där var din sista chans. Nu är det helt över för dig.",
   "ui.popup.info.button": "Tillbaka till pusslet",
   "ui.popup.info.content": "TODO",
   "ui.popup.info.title": "TODO",

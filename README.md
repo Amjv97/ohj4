@@ -6,5 +6,4 @@
 - kommentit
 - dokumentaatio (readmet)
 - scaling
-- limited tries
 - asetusvalikko kielelle
