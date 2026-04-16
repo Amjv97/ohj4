@@ -6,4 +6,3 @@
 - kommentit
 - dokumentaatio (readmet)
 - scaling
-- asetusvalikko kielelle

@@ -88,6 +88,7 @@ class State:
             title=title,
             content=content,
             actions=[action],
+            modal=True,
         )
 
         self.page.show_dialog(dialog)
@@ -107,6 +108,7 @@ class State:
         dialog = AlertDialog(
             title=title,
             content=content,
+            modal=True,
         )
 
         self.page.show_dialog(dialog)
