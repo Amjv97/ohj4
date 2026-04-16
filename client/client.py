@@ -28,7 +28,7 @@ def app(page: Page) -> None:
 
     page.on_route_change = on_route_change
     state.page = page
-    state.change_puzzle()
+    state.change_puzzle()  # Open the given puzzle at startup
 
 
 def run(host: str, port: int, language: str | None, version: int) -> bool:
@@ -39,4 +39,5 @@ def run(host: str, port: int, language: str | None, version: int) -> bool:
     state.request_new_puzzle()
     flet.app(target=app)
 
+    # Return the result of the puzzle (correct/incorrect)
     return state.result

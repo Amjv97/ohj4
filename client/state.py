@@ -32,12 +32,14 @@ class State:
     def get_url(self) -> str:
         return f"http://{self.host}:{self.port}/"
 
+    # A helper function that is assigned to a button and toggles an element on each invocation
     def click(self, selection: int) -> None:
         if selection in self.selected:
             self.selected.remove(selection)
         else:
             self.selected.add(selection)
 
+    # Contact the server for answer verification and display the result in a popup
     def verify_answer(self) -> None:
         url = self.get_url() + "verify_answer"
         data = {"answer": list(self.selected)}
@@ -59,6 +61,7 @@ class State:
             case _:
                 raise Exception(self.texts["exception.verification.invalid"])
 
+    # Ask the server for a new puzzle and set it as active
     def request_new_puzzle(self) -> None:
         url = self.get_url() + "get_puzzle"
         data = {"version": self.version}
@@ -74,6 +77,7 @@ class State:
         self.seed = response["seed"]
         self.selected = set()
 
+    # Helper function for creating popups with a title and a button. Content is optional
     def show_popup(
         self,
         function: Callable,
@@ -85,14 +89,15 @@ class State:
         content = Text(content_text) if content_text else None
         action = TextButton(button_text, on_click=function)
         dialog = AlertDialog(
+            modal=True,
             title=title,
             content=content,
             actions=[action],
-            modal=True,
         )
 
         self.page.show_dialog(dialog)
 
+    # Helper function for creating popups with a title and multiple buttons
     def show_popup_multiaction(
         self,
         functions: list[Callable],
@@ -108,16 +113,17 @@ class State:
         dialog = AlertDialog(
             title=title,
             content=content,
-            modal=True,
         )
 
         self.page.show_dialog(dialog)
 
+    # The popup that is shown when the user submits the correct answer
     def show_popup_correct(self) -> None:
         title = self.texts["ui.popup.correct.title"]
         button = self.texts["ui.popup.correct.button"]
         self.show_popup(self.exit, title, button)
 
+    # The popup that is shown when the user submits the incorrect answer
     def show_popup_incorrect(self) -> None:
         if self.retries > 0:
             title_path = "ui.popup.incorrect.title"
@@ -132,20 +138,24 @@ class State:
         button = self.texts[button_path]
         self.show_popup(function, title, button)
 
+    # The popup that is shown when the user activates the information menu
     def show_popup_info(self) -> None:
         title = self.texts["ui.popup.info.title"]
         content = self.texts["ui.popup.info.content"]
         button = self.texts["ui.popup.info.button"]
         self.show_popup(self.hide_popup, title, button, content)
 
+    # The popup that is shown when the user activates the settings menu
     def show_popup_settings(self) -> None:
         locales = self.read_language_file()
 
         title = self.texts["ui.popup.settings.title"]
-        buttons = [i for i in locales.values()]
-        functions: list[Callable] = [
-            partial(self.hide_popup_settings, i) for i in locales.keys()
-        ]
+        buttons = [i for i in locales.values()] if locales else []
+        functions: list[Callable] = (
+            [partial(self.hide_popup_settings, i) for i in locales.keys()]
+            if locales
+            else []
+        )
 
         self.show_popup_multiaction(functions, title, buttons)
 
@@ -155,15 +165,18 @@ class State:
     def hide_popup(self) -> None:
         self.page.pop_dialog()
 
+    # When exiting the settings menu, we need to also update the language along with refreshing the UI
     def hide_popup_settings(self, local: str) -> None:
         self.update_language(local)
-        self.refresh_ui()  # Display the updated language even before any user interaction
+        self.refresh_ui()
         self.hide_popup()
 
+    # A function that is called if the user failed the puzzle and decided to retry
     def hide_popup_reset(self) -> None:
         self.reset()
         self.hide_popup()
 
+    # Changing the active puzzle by requesting a new one and switching to it
     def reset(self) -> None:
         puzzle_old = self.puzzle
         self.request_new_puzzle()
@@ -177,6 +190,7 @@ class State:
             # Otherwise the puzzle gets loaded twice
             self.change_puzzle()
 
+    # Changing the active view to match the newly set puzzle
     def change_puzzle(self) -> None:
         match self.puzzle:
             case PUZZLE.PICTURE_SELECTION:
@@ -191,6 +205,7 @@ class State:
                 raise Exception(self.texts["exception.puzzle.invalid"])
         asyncio.create_task(self.page.push_route(route))
 
+    # A generic function for reading the json files contained within the assets folder
     def read_language_file(self, filename="locales") -> dict[str, str] | None:
         path = f"translations/{filename}.json"
         if not Path(path).exists():
@@ -198,10 +213,14 @@ class State:
 
         with open(path, "r") as file:
             return {
+                # If we're reading the metadata file, the file extension needs to be stripped out
                 key.replace(".json", "") if filename == "locales" else key: value
                 for key, value in json.load(file).items()
             }
 
+    # Try to parse the preferred language in the following order:
+    #   1) OS
+    #   2) fallback to "en"
     def get_language(self) -> str:
         local, _ = locale.getlocale()
         local = local.split("_")[0] if local else "en"
@@ -212,7 +231,10 @@ class State:
 
         return local
 
+    # Set a new language
     def update_language(self, language: str | None) -> None:
+        # Use the language given to the program as an argument
+        # If the argument is not given, fetch it from the os
         self.language = language or self.get_language()
         self.texts = dict()
 

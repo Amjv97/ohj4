@@ -9,6 +9,7 @@ import uvicorn
 clients = Clients()
 
 
+# Read the assets metadata file that contains information about the images stored within the assets directory
 def read_assets() -> dict:
     with open("assets/assets.json", "r") as file:
         return json.load(file)
@@ -18,10 +19,12 @@ def run(host: str, port: int) -> None:
     app = FastAPI()
     assets = read_assets()
 
+    # Provide an interface for accessing the assets remotely
     @app.get("/assets/{file}")
     def get_assets(file: str) -> FileResponse:
         return FileResponse(f"assets/{file}")
 
+    # Interface for requesting a new puzzle and initializing the 1:1 connection
     @app.post("/get_puzzle")
     def post_get_puzzle(request: Request, data: dict) -> dict:
         client = clients.add_client(request, data)
@@ -30,6 +33,7 @@ def run(host: str, port: int) -> None:
             "seed": client.seed,
         }
 
+    # Interface for verifying if the answer proposed by the client matches the one calculated on the server
     @app.post("/verify_answer")
     def post_verify_answer(request: Request, data: dict) -> dict:
         client = clients.get_client(request)
@@ -44,6 +48,7 @@ def run(host: str, port: int) -> None:
         result = "correct" if answer_proposal == answer_correct else "incorrect"
         return {"result": result}
 
+    # Calculate the answer for the puzzle using the given puzzle ID and seed
     def get_answer_correct(puzzle: PUZZLE, seed: int) -> set:
         rng = Random(seed)
 
@@ -60,4 +65,5 @@ def run(host: str, port: int) -> None:
     def get_answer_proposal(data: dict) -> set | None:
         return set(data["answer"]) if "answer" in data else None
 
+    # Run the file server independently
     uvicorn.run(app, host=host, port=port)

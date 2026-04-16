@@ -19,7 +19,7 @@ from flet import (
 )
 
 
-def make_buttons(
+def make_button(
     state: State,
     url: str,
     id: int,
@@ -65,18 +65,22 @@ def make_image_grid(images: list[Control]) -> GridView:
     )
 
 
+# Create a list of buttons from the given list of filenames that exist on the server
 def get_images(state: State, files: list[int]) -> list[Control]:
-    return [make_buttons(state, state.get_url() + f"assets/{i}.jpg", i) for i in files]
+    return [make_button(state, state.get_url() + f"assets/{i}.jpg", i) for i in files]
 
 
+# Read the assets metadata json file from the remote server
 def read_assets(state: State) -> dict:
     url = state.get_url() + "assets/assets.json"
     with request.urlopen(url) as file:
         return json.loads(file.read().decode())
 
 
+# Contact the url using a post request with the given data
 def try_send(url: str, data: dict) -> dict | None:
     try:
+        # Return the json given as a response if the contact was successful
         return requests.post(url, json=data).json()
     except ConnectionError:
         return None
