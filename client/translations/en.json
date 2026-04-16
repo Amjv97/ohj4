@@ -14,5 +14,6 @@
   "ui.popup.info.button": "Back to puzzle",
   "ui.popup.info.content": "TODO",
   "ui.popup.info.title": "TODO",
+  "ui.popup.settings.title": "Select language",
   "ui.puzzle.picture_selection.title": "Select pictures of politicians"
 }

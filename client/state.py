@@ -1,11 +1,12 @@
-import utils
 from collections.abc import Callable
-from flet import Page, AlertDialog, Text, TextButton
+from flet import Page, AlertDialog, Text, TextButton, Column, Control
+from functools import partial
 from pathlib import Path
 from puzzle import PUZZLE
 import asyncio
 import json
 import locale
+import utils
 
 
 class State:
@@ -24,6 +25,7 @@ class State:
 
     def __init__(self, retries: int = 3) -> None:
         self.selected = set()
+        self.texts = dict()
         self.result = False
         self.retries = retries
 
@@ -90,6 +92,25 @@ class State:
 
         self.page.show_dialog(dialog)
 
+    def show_popup_multiaction(
+        self,
+        functions: list[Callable],
+        title_text: str,
+        button_texts: list[str],
+    ) -> None:
+        title = Text(title_text)
+        actions: list[Control] = [
+            TextButton(button_text, on_click=function)
+            for function, button_text in zip(functions, button_texts)
+        ]
+        content = Column(actions)
+        dialog = AlertDialog(
+            title=title,
+            content=content,
+        )
+
+        self.page.show_dialog(dialog)
+
     def show_popup_correct(self) -> None:
         title = self.texts["ui.popup.correct.title"]
         button = self.texts["ui.popup.correct.button"]
@@ -115,11 +136,27 @@ class State:
         button = self.texts["ui.popup.info.button"]
         self.show_popup(self.hide_popup, title, button, content)
 
+    def show_popup_settings(self) -> None:
+        locales = self.read_language_file()
+
+        title = self.texts["ui.popup.settings.title"]
+        buttons = [i for i in locales.values()]
+        functions: list[Callable] = [
+            partial(self.hide_popup_settings, i) for i in locales.keys()
+        ]
+
+        self.show_popup_multiaction(functions, title, buttons)
+
     async def exit(self) -> None:
         await self.page.window.close()
 
     def hide_popup(self) -> None:
         self.page.pop_dialog()
+
+    def hide_popup_settings(self, local: str) -> None:
+        self.update_language(local)
+        self.refresh_ui()  # Display the updated language even before any user interaction
+        self.hide_popup()
 
     def hide_popup_reset(self) -> None:
         self.reset()
@@ -152,29 +189,37 @@ class State:
                 raise Exception(self.texts["exception.puzzle.invalid"])
         asyncio.create_task(self.page.push_route(route))
 
+    def read_language_file(self, filename="locales") -> dict[str, str] | None:
+        path = f"translations/{filename}.json"
+        if not Path(path).exists():
+            return None
+
+        with open(path, "r") as file:
+            return {
+                key.replace(".json", "") if filename == "locales" else key: value
+                for key, value in json.load(file).items()
+            }
+
     def get_language(self) -> str:
         local, _ = locale.getlocale()
         local = local.split("_")[0] if local else "en"
+        locales = self.read_language_file()
 
-        locales_file = "translations/locales.json"
-        with open(locales_file, "r") as file:
-            locales = set(i.split(".")[0] for i in json.load(file).values())
-
-        if local not in locales:
+        if not locales or local not in locales.keys():
             local = "en"
 
         return local
 
     def update_language(self, language: str | None) -> None:
         self.language = language or self.get_language()
-        locale = f"translations/{self.language}.json"
-        locale_en = "translations/en.json"
+        self.texts = dict()
 
         # Add missing entries from the english locale as a backup
-        with open(locale_en, "r") as file:
-            self.texts = json.load(file)
+        texts = self.read_language_file("en")
+        if texts:
+            self.texts |= texts
 
         # Only add the chosen locale on top if it exists
-        if Path(locale).exists():
-            with open(locale, "r") as file:
-                self.texts |= json.load(file)
+        texts = self.read_language_file(self.language)
+        if texts:
+            self.texts |= texts
