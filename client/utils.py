@@ -1,5 +1,7 @@
+import requests
 import json
 from functools import partial
+from requests.exceptions import ConnectionError
 from state import State
 from urllib import request
 from flet import (
@@ -70,3 +72,10 @@ def read_assets(state: State) -> dict:
     url = state.get_url() + "assets/assets.json"
     with request.urlopen(url) as file:
         return json.loads(file.read().decode())
+
+
+def try_send(url: str, data: dict) -> dict | None:
+    try:
+        return requests.post(url, json=data).json()
+    except ConnectionError:
+        return None

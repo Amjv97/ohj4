@@ -35,6 +35,6 @@ def run(host: str, port: int, language: str | None, version: int) -> None:
     state.host = host
     state.port = port
     state.version = version
-    state.request_new_puzzle()
     state.update_language(language)
+    state.request_new_puzzle()
     flet.app(target=app)

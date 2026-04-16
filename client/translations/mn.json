@@ -2,6 +2,7 @@
   "exception.puzzle.inexistent": "Серверээс даалгавар/seed өгөгдөөгүй байна",
   "exception.puzzle.invalid": "Буруу даалгавар",
   "exception.route.invalid": "Буруу зам",
+  "exception.server.connection.error": "Сервертэй холбогдох боломжгүй",
   "exception.verification.inexistent": "Серверээс үр дүн өгөгдөөгүй байна",
   "exception.verification.invalid": "Сервер буруу үр дүн илгээсэн байна",
   "ui.button.verify": "Шалгах",

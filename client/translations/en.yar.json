@@ -2,6 +2,7 @@
   "exception.puzzle.inexistent": "No treasure riddle or seed be given by the ship",
   "exception.puzzle.invalid": "That be a cursed puzzle",
   "exception.route.invalid": "That be a cursed route, matey",
+  "exception.server.connection.error": "Arrr, can’t be connectin’ to the server, matey!",
   "exception.verification.inexistent": "No booty result returned by the ship",
   "exception.verification.invalid": "That be a cursed result sent by the server",
   "ui.button.verify": "Check yer answer",

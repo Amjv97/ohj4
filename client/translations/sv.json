@@ -2,6 +2,7 @@
   "exception.puzzle.inexistent": "Ingen pussel/seed tillhandahölls av servern",
   "exception.puzzle.invalid": "Gustohis puzzle",
   "exception.route.invalid": "Ogiltig rutt",
+  "exception.server.connection.error": "Det går inte att ansluta till servern",
   "exception.verification.inexistent": "Inget resultat tillhandahölls av servern",
   "exception.verification.invalid": "Ogiltigt resultat från servern",
   "ui.button.verify": "Verifiera",

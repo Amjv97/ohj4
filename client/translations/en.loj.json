@@ -2,6 +2,7 @@
   "exception.puzzle.inexistent": "no puzlo .e no se samci cu se datni fi lo sevzi",
   "exception.puzzle.invalid": "na validi puzlo",
   "exception.route.invalid": "na validi pluta",
+  "exception.server.connection.error": "na kakne lo nu jorne lo sorcu",
   "exception.verification.inexistent": "no datni pe lo se zanru cu se renvi fi lo sevzi",
   "exception.verification.invalid": "na validi se jalge poi se dunda lo sevzi",
   "ui.button.verify": "facki",

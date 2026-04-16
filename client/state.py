@@ -1,3 +1,4 @@
+import utils
 from collections.abc import Callable
 from flet import Page, AlertDialog, Text, TextButton
 from pathlib import Path
@@ -5,7 +6,6 @@ from puzzle import PUZZLE
 import asyncio
 import json
 import locale
-import requests
 
 
 class State:
@@ -35,7 +35,10 @@ class State:
     def verify_answer(self) -> None:
         url = self.get_url() + "verify_answer"
         data = {"answer": list(self.selected)}
-        response = requests.post(url, json=data).json()
+        response = utils.try_send(url, data)
+
+        if not response:
+            raise Exception(self.texts["exception.server.connection.error"])
 
         if "result" not in response:
             raise Exception(self.texts["exception.verification.inexistent"])
@@ -51,7 +54,10 @@ class State:
     def request_new_puzzle(self) -> None:
         url = self.get_url() + "get_puzzle"
         data = {"version": self.version}
-        response = requests.post(url, json=data).json()
+        response = utils.try_send(url, data)
+
+        if not response:
+            raise Exception(self.texts["exception.server.connection.error"])
 
         if not all(i in response for i in ["puzzle", "seed"]):
             raise Exception(self.texts["exception.puzzle.inexistent"])

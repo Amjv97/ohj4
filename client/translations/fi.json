@@ -2,6 +2,7 @@
   "exception.puzzle.inexistent": "Palvelin ei palauttanut pulmaa tai siementä",
   "exception.puzzle.invalid": "Virheellinen pulma",
   "exception.route.invalid": "Virheellinen reitti",
+  "exception.server.connection.error": "Yhteyttä palvelimeen ei voida muodostaa",
   "exception.verification.inexistent": "Palvelin ei palauttanut tulosta",
   "exception.verification.invalid": "Palvelin palautti virheellisen tuloksen",
   "ui.button.verify": "Tarkista",

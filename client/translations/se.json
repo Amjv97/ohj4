@@ -2,6 +2,7 @@
   "exception.puzzle.inexistent": "Serveris ii leat addán puzzlea/seed",
   "exception.puzzle.invalid": "Ogiltigt pussel",
   "exception.route.invalid": "Gustohis geaidnu",
+  "exception.server.connection.error": "Ii leat vejolaš oktavuođa serverii",
   "exception.verification.inexistent": "Serveris ii leat addán bohtosa",
   "exception.verification.invalid": "Gustohis bohtos serveris",
   "ui.button.verify": "Dárkkit",

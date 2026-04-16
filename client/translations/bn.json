@@ -2,6 +2,7 @@
   "exception.puzzle.inexistent": "সার্ভার কোনো পাজল/সিড প্রদান করেনি",
   "exception.puzzle.invalid": "অবৈধ পাজল",
   "exception.route.invalid": "অবৈধ রুট",
+  "exception.server.connection.error": "সার্ভারের সাথে সংযোগ স্থাপন করা যাচ্ছে না",
   "exception.verification.inexistent": "সার্ভার কোনো ফলাফল প্রদান করেনি",
   "exception.verification.invalid": "সার্ভার একটি অবৈধ ফলাফল প্রদান করেছে",
   "ui.button.verify": "যাচাই করুন",

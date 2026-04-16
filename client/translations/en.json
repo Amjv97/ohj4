@@ -2,6 +2,7 @@
   "exception.puzzle.inexistent": "No puzzle/seed provided by the server",
   "exception.puzzle.invalid": "Invalid puzzle",
   "exception.route.invalid": "Invalid route",
+  "exception.server.connection.error": "Unable to connect to the server",
   "exception.verification.inexistent": "No result provided by the server",
   "exception.verification.invalid": "Invalid result provided by the server",
   "ui.button.verify": "Verify",
