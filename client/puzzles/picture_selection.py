@@ -38,4 +38,4 @@ def get_view(state: State, page: Page) -> View:
 
     # Save the function so that we can use it for redrawing the screen after changing the language or shuffling the same puzzle
     state.refresh_ui = build_puzzle
-    return View(controls=[container])
+    return utils.make_view(container)

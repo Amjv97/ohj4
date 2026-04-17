@@ -35,6 +35,7 @@ from flet import (
     TextStyle,
     FontWeight,
     Alignment,
+    View,
 )
 
 
@@ -230,3 +231,7 @@ def make_theme() -> Theme:
         button_theme=button_theme,
         icon_button_theme=icon_button_theme,
     )
+
+
+def make_view(container: Column) -> View:
+    return View(controls=[container], bgcolor="#F4F4F4")

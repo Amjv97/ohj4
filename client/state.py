@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from flet import Page
+from flet import Page, Colors
 from functools import partial
 from pathlib import Path
 from puzzle import PUZZLE
