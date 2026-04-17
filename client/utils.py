@@ -31,6 +31,11 @@ from flet import (
     TextButton,
     Theme,
     View,
+    Icons,
+    IconData,
+    IconButton,
+    IconButtonTheme,
+    VisualDensity,
 )
 
 
@@ -88,7 +93,12 @@ def make_shadow(light: bool) -> BoxShadow:
     return BoxShadow(blur_radius=blur_radius, color=color)
 
 
-def make_image_button(
+def make_view(container: Column) -> View:
+    padding = Padding(top=60)
+    return View(controls=[container], padding=padding)
+
+
+def make_button_image(
     function: Callable,
     url: str,
     id: int,
@@ -113,13 +123,17 @@ def make_image_button(
     )
 
 
-def make_view(container: Column) -> View:
-    padding = Padding(top=60)
-    return View(controls=[container], padding=padding)
+def make_button_text(function: Callable, text: str) -> Container:
+    button = Button(content=text, on_click=function)
+    return Container(
+        border_radius=999,  # Buttons should be rounded along with their dropshadows
+        content=button,
+        shadow=make_shadow(True),
+    )
 
 
-def make_button(text: str, function: Callable) -> Container:
-    button = Button(text, on_click=function)
+def make_button_icon(function: Callable, icon: IconData) -> Container:
+    button = IconButton(icon=icon, on_click=function)
     return Container(
         border_radius=999,  # Buttons should be rounded along with their dropshadows
         content=button,
@@ -128,10 +142,10 @@ def make_button(text: str, function: Callable) -> Container:
 
 
 def make_buttons_row(state: State) -> Row:
-    settings = make_button("S", state.show_popup_settings)
-    reset = make_button("R", state.reset)
-    info = make_button("I", state.show_popup_info)
-    verify = make_button(state.texts["ui.button.verify"], state.verify_answer)
+    settings = make_button_icon(state.show_popup_settings, Icons.SETTINGS)
+    reset = make_button_icon(state.reset, Icons.REFRESH)
+    info = make_button_icon(state.show_popup_info, Icons.INFO)
+    verify = make_button_text(state.verify_answer, state.texts["ui.button.verify"])
     return Row(
         alignment=MainAxisAlignment.CENTER,
         controls=[settings, reset, info, verify],
@@ -168,7 +182,7 @@ def make_image_grid(images: list[Control]) -> Container:
 
 # Create a list of buttons from the given list of filenames that exist on the server
 def get_images(function: Callable, base_url: str, files: list[int]) -> list[Control]:
-    return [make_image_button(function, base_url + f"assets/{i}.jpg", i) for i in files]
+    return [make_button_image(function, base_url + f"assets/{i}.jpg", i) for i in files]
 
 
 # Read the assets metadata json file from the remote server
@@ -194,12 +208,15 @@ def make_theme() -> Theme:
     button_style = ButtonStyle(
         bgcolor="#CECECE",  # Make the buttons visible without elevation
         elevation=0,  # Skeuomorphism not welcome here
-        padding=30,  # Make the buttons larger
+        padding=26,  # Make the buttons larger
+        visual_density=VisualDensity.STANDARD,  # Makes the icon buttons and textual buttons the same size for some reason
         shape=RoundedRectangleBorder(),  # Make buttons rectangle since we'll be rounding them with the shadow
     )
     button_theme = ButtonTheme(button_style)
+    icon_button_theme = IconButtonTheme(button_style)
 
     return Theme(
         color_scheme=color_scheme,
         button_theme=button_theme,
+        icon_button_theme=icon_button_theme,
     )
