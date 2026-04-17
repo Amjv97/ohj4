@@ -36,6 +36,9 @@ from flet import (
     FontWeight,
     Alignment,
     View,
+    Stack,
+    Icon,
+    Offset,
 )
 
 
@@ -104,16 +107,34 @@ def make_button_image(
         filter_quality=FilterQuality.HIGH,  # Increases the sharpness by a noticable amount
         src=url,
     )
-
     container = Container(
         border_radius=24,
         content=image,
         shadow=make_shadow(True),
     )
 
-    function = partial(function, id)
+    # Checkmark for indicating whether the image is selected
+    checkmark_icon = Icon(
+        color=COLORS.BABY_BLUE,
+        icon=Icons.CHECK_CIRCLE,
+        size=48,
+    )
+
+    # Put the icon into a container so that we can make it solid rather than transparent
+    checkmark = Container(
+        bgcolor=COLORS.BACKGROUND_PRIMARY,
+        border_radius=64,
+        content=checkmark_icon,
+        padding=-4,
+        visible=False,  # Invisible by default
+        offset=Offset(-0.25, -0.25),
+    )
+
+    stack = Stack([container, checkmark])
+
+    function = partial(function, id, checkmark)
     return GestureDetector(
-        content=container,
+        content=stack,
         on_tap=function,
     )
 

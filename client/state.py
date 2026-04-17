@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from flet import Page
+from flet import Page, Container
 from functools import partial
 from pathlib import Path
 from puzzle import PUZZLE
@@ -33,10 +33,12 @@ class State:
         return f"http://{self.host}:{self.port}/"
 
     # A helper function that is assigned to a button and toggles an element on each invocation
-    def click(self, selection: int) -> None:
+    def click(self, selection: int, icon: Container) -> None:
         if selection in self.selected:
+            icon.visible = False
             self.selected.remove(selection)
         else:
+            icon.visible = True
             self.selected.add(selection)
 
     # Contact the server for answer verification and display the result in a popup
