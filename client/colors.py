@@ -1,0 +1,11 @@
+from enum import Enum
+
+
+class COLORS(str, Enum):
+    BABY_BLUE = "#B5D6F2"
+    BACKGROUND_BUTTON = "#CECECE"
+    BACKGROUND_PRIMARY = "#F4F4F4"
+    BACKGROUND_SECONDARY = "#FFFFFF"
+    DARK_SHADOW = "#BBBBBB"  # RRGGBBAA isn't supported
+    FOREGROUND = "#000000"
+    LIGHT_SHADOW = "#DDDDDD"

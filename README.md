@@ -42,5 +42,4 @@ All of the arguments listed above are optional. The address falls back to "127.0
 - loput puzzlet
 - näkymäkohtainen info popup
 - keyboard shortcuts
-- disabled/highlighted buttons
 - image selection visualization

@@ -1,6 +1,7 @@
 import requests
 import json
 from collections.abc import Callable
+from colors import COLORS
 from functools import partial
 from requests.exceptions import ConnectionError
 from state import State
@@ -14,7 +15,6 @@ from flet import (
     ButtonStyle,
     ButtonTheme,
     ColorScheme,
-    Colors,
     Column,
     Container,
     Control,
@@ -85,10 +85,10 @@ def make_dialog(
 def make_shadow(light: bool) -> BoxShadow:
     if light:
         blur_radius = 16
-        color = Colors.BLACK_12
+        color = COLORS.LIGHT_SHADOW
     else:
         blur_radius = 64
-        color = Colors.BLACK_26
+        color = COLORS.DARK_SHADOW
 
     return BoxShadow(blur_radius=blur_radius, color=color)
 
@@ -118,8 +118,20 @@ def make_button_image(
     )
 
 
-def make_button_text(function: Callable, text: str) -> Container:
-    button = Button(content=text, on_click=function)
+def make_button_text(
+    function: Callable,
+    text: str,
+    disabled: bool = False,
+    highlighted: bool = True,
+) -> Container:
+    color = COLORS.BABY_BLUE if highlighted else None
+    button = Button(
+        content=text,
+        disabled=disabled,
+        on_click=function,
+        bgcolor=color,
+    )
+
     return Container(
         border_radius=64,  # Buttons should be rounded along with their dropshadows
         content=button,
@@ -178,7 +190,7 @@ def make_image_grid(images: list[Control]) -> Container:
     return Container(
         border_radius=48,
         padding=30,
-        bgcolor=Colors.WHITE,
+        bgcolor=COLORS.BACKGROUND_SECONDARY,
         content=grid,
         shadow=make_shadow(True),
     )
@@ -211,12 +223,12 @@ def try_send(url: str, data: dict) -> dict | None:
 
 def make_theme() -> Theme:
     color_scheme = ColorScheme(
-        primary=Colors.BLACK,  # FG COLOR
+        primary=COLORS.FOREGROUND,
     )
 
     text_style = TextStyle(size=20, weight=FontWeight.W_500)
     button_style = ButtonStyle(
-        bgcolor="#CECECE",  # Make the buttons visible without elevation
+        bgcolor=COLORS.BACKGROUND_BUTTON,  # Make the buttons visible without elevation
         elevation=0,  # Skeuomorphism not welcome here
         icon_size=32,
         padding=16,  # Make the buttons larger
@@ -234,4 +246,4 @@ def make_theme() -> Theme:
 
 
 def make_view(container: Column) -> View:
-    return View(controls=[container], bgcolor="#F4F4F4")
+    return View(controls=[container], bgcolor=COLORS.BACKGROUND_PRIMARY)
