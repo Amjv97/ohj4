@@ -36,8 +36,3 @@ The server on the other hand contains the following:
 - \-p, \-\-port
 
 All of the arguments listed above are optional. The address falls back to "127.0.0.1", i.e. localhost and the port falls back to 41337. If the language argument is not given, it is automatically fetched from the OS.
-
-# TODO
-
-- loput puzzlet
-- keyboard shortcuts

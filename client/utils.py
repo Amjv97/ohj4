@@ -19,7 +19,6 @@ from flet import (
     Container,
     Control,
     FilterQuality,
-    GestureDetector,
     GridView,
     Image,
     Padding,
@@ -48,21 +47,16 @@ def make_dialog_multiaction(
     title_text: str,
     button_texts: list[str],
     modal: bool = False,
-    tight: bool = True,
 ) -> AlertDialog:
-    title = Text(title_text)
     actions: list[Control] = [
         TextButton(button_text, on_click=function)
         for function, button_text in zip(functions, button_texts)
     ]
-    content = Column(
-        controls=actions,
-        tight=tight,  # Don't let the dialog grow vertically to infinitum
-    )
+
     return AlertDialog(
+        Column(actions, tight=True),  # Limit the dialog vertically
         modal=modal,
-        title=title,
-        content=content,
+        title=Text(title_text),
     )
 
 
@@ -74,45 +68,23 @@ def make_dialog(
     content_text: str | None = None,
     modal: bool = False,
 ) -> AlertDialog:
-    title = Text(title_text)
-    content = Text(content_text) if content_text else None
-    action = TextButton(button_text, on_click=function)
     return AlertDialog(
+        Text(content_text) if content_text else None,
         modal=modal,
-        title=title,
-        content=content,
-        actions=[action],
+        title=Text(title_text),
+        actions=[TextButton(button_text, on_click=function)],
     )
 
 
-def make_shadow(light: bool) -> BoxShadow:
-    if light:
-        blur_radius = 16
-        color = COLORS.LIGHT_SHADOW
-    else:
-        blur_radius = 64
-        color = COLORS.DARK_SHADOW
-
-    return BoxShadow(blur_radius=blur_radius, color=color)
+def make_shadow() -> BoxShadow:
+    return BoxShadow(blur_radius=16, color=COLORS.SHADOW)
 
 
 def make_button_image(
     function: Callable,
     url: str,
     id: int,
-) -> Control:
-    animation = Animation(duration=300, curve=AnimationCurve.LINEAR)
-    image = Image(
-        fade_in_animation=animation,  # Don't immediately display pictures that haven't been cached yet
-        filter_quality=FilterQuality.HIGH,  # Increases the sharpness by a noticable amount
-        src=url,
-    )
-    container = Container(
-        border_radius=24,
-        content=image,
-        shadow=make_shadow(True),
-    )
-
+) -> Stack:
     # Checkmark for indicating whether the image is selected
     checkmark_icon = Icon(
         color=COLORS.BABY_BLUE,
@@ -122,21 +94,32 @@ def make_button_image(
 
     # Put the icon into a container so that we can make it solid rather than transparent
     checkmark = Container(
+        checkmark_icon,
         bgcolor=COLORS.BACKGROUND_PRIMARY,
         border_radius=64,
-        content=checkmark_icon,
-        padding=-4,
-        visible=False,  # Invisible by default
         offset=Offset(-0.25, -0.25),
+        padding=-4,
+        shadow=make_shadow(),
+        visible=False,  # Invisible by default
     )
 
-    stack = Stack([container, checkmark])
-
-    function = partial(function, id, checkmark)
-    return GestureDetector(
-        content=stack,
-        on_tap=function,
+    image = Image(
+        url,
+        fade_in_animation=Animation(300, AnimationCurve.LINEAR),
+        filter_quality=FilterQuality.HIGH,  # Increases the sharpness by a noticable amount
     )
+    button = Button(
+        image,
+        on_click=partial(function, id, checkmark),
+        style=ButtonStyle(padding=0),
+    )
+    container = Container(
+        button,
+        border_radius=24,
+        shadow=make_shadow(),
+    )
+
+    return Stack([container, checkmark])
 
 
 def make_button_text(
@@ -145,29 +128,27 @@ def make_button_text(
     disabled: bool = False,
     highlighted: bool = True,
 ) -> Container:
-    color = COLORS.BABY_BLUE if highlighted else None
     button = Button(
-        content=text,
+        text,
         disabled=disabled,
         on_click=function,
-        bgcolor=color,
+        bgcolor=COLORS.BABY_BLUE if highlighted else None,
     )
 
     return Container(
+        button,
         border_radius=64,  # Buttons should be rounded along with their dropshadows
-        content=button,
         height=64,
-        shadow=make_shadow(True),
+        shadow=make_shadow(),
     )
 
 
 def make_button_icon(function: Callable, icon: IconData) -> Container:
-    button = IconButton(icon=icon, on_click=function)
     return Container(
+        IconButton(icon=icon, on_click=function),
         border_radius=64,  # Buttons should be rounded along with their dropshadows
-        content=button,
         height=64,
-        shadow=make_shadow(True),
+        shadow=make_shadow(),
     )
 
 
@@ -179,41 +160,39 @@ def make_buttons_row(state: State) -> Row:
     spacer = Container(expand=True)
 
     return Row(
-        controls=[reset, info, settings, spacer, verify],
+        [reset, info, settings, spacer, verify],
         spacing=20,
     )
 
 
 def make_elements_column_grid(title: Text, grid: Container, buttons: Row) -> Container:
     column = Column(
-        controls=[title, grid, buttons],
+        [title, grid, buttons],
         spacing=40,
         width=400,
     )
-    padding = Padding(top=50)
 
     return Container(
+        column,
         alignment=Alignment.CENTER,
-        content=column,
-        padding=padding,
+        padding=Padding(top=50),
     )
 
 
 def make_image_grid(images: list[Control]) -> Container:
-    spacing = 20
     grid = GridView(
+        images,
         runs_count=3,
-        controls=images,
-        run_spacing=spacing,
-        spacing=spacing,
+        run_spacing=20,
+        spacing=20,
     )
 
     return Container(
+        grid,
         border_radius=48,
         padding=30,
         bgcolor=COLORS.BACKGROUND_SECONDARY,
-        content=grid,
-        shadow=make_shadow(True),
+        shadow=make_shadow(),
     )
 
 
@@ -243,28 +222,21 @@ def try_send(url: str, data: dict) -> dict | None:
 
 
 def make_theme() -> Theme:
-    color_scheme = ColorScheme(
-        primary=COLORS.FOREGROUND,
-    )
-
-    text_style = TextStyle(size=20, weight=FontWeight.W_500)
     button_style = ButtonStyle(
         bgcolor=COLORS.BACKGROUND_BUTTON,  # Make the buttons visible without elevation
         elevation=0,  # Skeuomorphism not welcome here
         icon_size=32,
         padding=16,  # Make the buttons larger
         shape=RoundedRectangleBorder(),  # Make buttons rectangle since we'll be rounding them with the shadow
-        text_style=text_style,  # Make the button text more bold and larger
+        text_style=TextStyle(size=20, weight=FontWeight.W_500),
     )
-    button_theme = ButtonTheme(button_style)
-    icon_button_theme = IconButtonTheme(button_style)
 
     return Theme(
-        color_scheme=color_scheme,
-        button_theme=button_theme,
-        icon_button_theme=icon_button_theme,
+        color_scheme=ColorScheme(COLORS.FOREGROUND),
+        button_theme=ButtonTheme(button_style),
+        icon_button_theme=IconButtonTheme(button_style),
     )
 
 
 def make_view(container: Column) -> View:
-    return View(controls=[container], bgcolor=COLORS.BACKGROUND_PRIMARY)
+    return View([container], bgcolor=COLORS.BACKGROUND_PRIMARY)
