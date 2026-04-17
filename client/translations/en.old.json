@@ -12,8 +12,11 @@
   "ui.popup.incorrect.title": "Alas! Try once more",
   "ui.popup.incorrect.title.last": "That was thy final chance. It is now wholly over for thee",
   "ui.popup.info.button": "Return to the puzzle",
-  "ui.popup.info.content": "TODO",
-  "ui.popup.info.title": "TODO",
+  "ui.popup.info.content.PUZZLE.PICTURE_SELECTION": "Select all pictures wherein there be at least one politician. Said politician may hail from any realm imaginable. Deceased and former politicians shall be counted as well.\n\nThe puzzle may contain from 0 unto 9 politicians in total.",
+  "ui.popup.info.content.PUZZLE.SHAPE_RECOGNITION": "Select all shapes which accord with the given criteria. Thou must also select shapes partly concealed by the bounds, for their form may yet be discerned from scant information.",
+  "ui.popup.info.content.PUZZLE.TETRIS": "Play Tetris until thou hast filled four rows with blocks. Thou mayst use the arrow keys to move the blocks and the X key to rotate them.\n\nUpon fulfilling the criteria, thou shalt be returned to the main application anon.",
+  "ui.popup.info.content.PUZZLE.TEXT_RECOGNITION": "Endeavour to write that which is shown in the image. Take no heed of distractions such as lines and shapes that resemble not any letter of the English alphabet.",
+  "ui.popup.info.title": "Information",
   "ui.popup.settings.title": "Select thy tongue",
   "ui.puzzle.picture_selection.title": "Choose the images of politicians"
 }

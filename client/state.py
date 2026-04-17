@@ -105,7 +105,7 @@ class State:
     # The popup that is shown when the user activates the information menu
     def show_popup_info(self) -> None:
         title = self.texts["ui.popup.info.title"]
-        content = self.texts["ui.popup.info.content"]
+        content = self.texts[f"ui.popup.info.content.{self.puzzle}"]
         button = self.texts["ui.popup.info.button"]
         dialog = utils.make_dialog(self.hide_popup, title, button, content)
         self.page.show_dialog(dialog)
