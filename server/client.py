@@ -7,7 +7,7 @@ import random
 class Clients:
     clients: dict[str, Client]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.clients = {}
 
     # Based on an incoming request, see if the same client has already been saved in the dictionary

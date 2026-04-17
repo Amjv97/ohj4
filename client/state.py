@@ -170,7 +170,7 @@ class State:
         asyncio.create_task(self.page.push_route(route))
 
     # A generic function for reading the json files contained within the assets folder
-    def read_language_file(self, filename="locales") -> dict[str, str] | None:
+    def read_language_file(self, filename: str = "locales") -> dict[str, str] | None:
         path = f"translations/{filename}.json"
         if not Path(path).exists():
             return None

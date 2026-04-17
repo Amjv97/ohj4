@@ -14,7 +14,7 @@ def get_view(state: State, page: Page) -> View:
     def get_politicans() -> list[int]:
         # We'll need to use the seed given by the server since the server will be calculating the same values independently for verification
         rng = Random(state.seed)
-        assets = utils.read_assets(state)
+        assets = utils.read_assets(state.get_url())
         files = assets["picture_selection"]
         correct = [int(i.split(".")[0]) for i in files["correct"]]
         incorrect = [int(i.split(".")[0]) for i in files["incorrect"]]
@@ -23,7 +23,7 @@ def get_view(state: State, page: Page) -> View:
     # Build the view as a whole
     def build_puzzle() -> None:
         politicans = get_politicans()
-        images = utils.get_images(state, politicans)
+        images = utils.get_images(state.click, state.get_url(), politicans)
 
         title = Text(state.texts["ui.puzzle.picture_selection.title"])
         grid = utils.make_image_grid(images)

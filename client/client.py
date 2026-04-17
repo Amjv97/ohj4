@@ -5,6 +5,7 @@ from puzzles import tetris
 from puzzles import text_recognition
 from state import State
 import flet
+import utils
 
 state = State()
 
@@ -26,6 +27,7 @@ def app(page: Page) -> None:
         page.views = [view]
         page.update()
 
+    page.theme = utils.make_theme()
     page.theme_mode = ThemeMode.LIGHT
     page.window.height = 750
     page.window.width = 500

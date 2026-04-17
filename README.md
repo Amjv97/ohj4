@@ -40,6 +40,11 @@ All of the arguments listed above are optional. The address falls back to "127.0
 # TODO
 
 - loput puzzlet
-- UI/UX
 - näkymäkohtainen info popup
-- scaling
+- keyboard shortcuts
+- disabled/highlighted buttons
+- button icons
+- image selection visualization
+- title font + placement
+- button placement
+- monochrome background color
