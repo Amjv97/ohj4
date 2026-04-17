@@ -27,7 +27,12 @@ def app(page: Page) -> None:
         page.update()
 
     page.theme_mode = ThemeMode.LIGHT
+    page.window.height = 750
+    page.window.width = 500
+    page.window.min_height = page.window.height
+    page.window.min_width = page.window.width
     page.on_route_change = on_route_change
+
     state.page = page
     state.change_puzzle()  # Open the given puzzle at startup
 

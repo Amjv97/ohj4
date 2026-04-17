@@ -16,6 +16,12 @@ from flet import (
     Row,
     Text,
     View,
+    Animation,
+    AnimationCurve,
+    FilterQuality,
+    Container,
+    BoxShadow,
+    Colors,
 )
 
 
@@ -24,10 +30,23 @@ def make_button(
     url: str,
     id: int,
 ) -> Control:
-    image = Image(url)
+    animation = Animation(duration=300, curve=AnimationCurve.LINEAR)
+    image = Image(
+        fade_in_animation=animation,  # Don't immediately display pictures that haven't been cached yet
+        filter_quality=FilterQuality.HIGH,  # Increases the sharpness by a noticable amount
+        src=url,
+    )
+
+    shadow = BoxShadow(blur_radius=16, color=Colors.BLACK_12)
+    container = Container(
+        border_radius=24,
+        content=image,
+        shadow=shadow,
+    )
+
     function = partial(state.click, id)
     return GestureDetector(
-        content=image,
+        content=container,
         on_tap=function,
     )
 
@@ -57,11 +76,23 @@ def make_elements_column_grid(title: Text, grid: GridView, buttons: Row) -> Colu
     )
 
 
-def make_image_grid(images: list[Control]) -> GridView:
-    return GridView(
-        controls=images,
+def make_image_grid(images: list[Control]) -> Container:
+    spacing=20
+    grid = GridView(
         runs_count=3,
-        width=300,
+        controls=images,
+        run_spacing=spacing,
+        spacing=spacing,
+    )
+
+    shadow = BoxShadow(blur_radius=64, color=Colors.BLACK_26)
+    return Container(
+        border_radius=48,
+        padding=30,
+        width=380,
+        bgcolor=Colors.WHITE,
+        content=grid,
+        shadow=shadow,
     )
 
 

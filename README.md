@@ -43,3 +43,4 @@ All of the arguments listed above are optional. The address falls back to "127.0
 - UI/UX
 - näkymäkohtainen info popup
 - scaling
+- korjaa bugi jossa restart nappulaa voi painaa rajattomasti
