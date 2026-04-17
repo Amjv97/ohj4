@@ -1,4 +1,4 @@
-from flet import Page
+from flet import Page, ThemeMode
 from puzzles import picture_selection
 from puzzles import shape_recognition
 from puzzles import tetris
@@ -26,6 +26,7 @@ def app(page: Page) -> None:
         page.views = [view]
         page.update()
 
+    page.theme_mode = ThemeMode.LIGHT
     page.on_route_change = on_route_change
     state.page = page
     state.change_puzzle()  # Open the given puzzle at startup

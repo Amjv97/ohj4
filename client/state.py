@@ -84,12 +84,13 @@ class State:
         title_text: str,
         button_text: str,
         content_text: str | None = None,
+        modal: bool = False,
     ) -> None:
         title = Text(title_text)
         content = Text(content_text) if content_text else None
         action = TextButton(button_text, on_click=function)
         dialog = AlertDialog(
-            modal=True,
+            modal=modal,
             title=title,
             content=content,
             actions=[action],
@@ -103,6 +104,7 @@ class State:
         functions: list[Callable],
         title_text: str,
         button_texts: list[str],
+        modal: bool = False,
     ) -> None:
         title = Text(title_text)
         actions: list[Control] = [
@@ -111,6 +113,7 @@ class State:
         ]
         content = Column(actions)
         dialog = AlertDialog(
+            modal=modal,
             title=title,
             content=content,
         )
@@ -121,7 +124,7 @@ class State:
     def show_popup_correct(self) -> None:
         title = self.texts["ui.popup.correct.title"]
         button = self.texts["ui.popup.correct.button"]
-        self.show_popup(self.exit, title, button)
+        self.show_popup(self.exit, title, button, modal=True)
 
     # The popup that is shown when the user submits the incorrect answer
     def show_popup_incorrect(self) -> None:
@@ -136,7 +139,7 @@ class State:
 
         title = self.texts[title_path]
         button = self.texts[button_path]
-        self.show_popup(function, title, button)
+        self.show_popup(function, title, button, modal=True)
 
     # The popup that is shown when the user activates the information menu
     def show_popup_info(self) -> None:
