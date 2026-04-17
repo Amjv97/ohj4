@@ -2,7 +2,6 @@ import utils
 from random import Random
 from state import State
 from flet import (
-    Text,
     Column,
     View,
     Page,
@@ -25,7 +24,7 @@ def get_view(state: State, page: Page) -> View:
         politicans = get_politicans()
         images = utils.get_images(state.click, state.get_url(), politicans)
 
-        title = Text(state.texts["ui.puzzle.picture_selection.title"])
+        title = utils.make_title(state.texts["ui.puzzle.picture_selection.title"])
         grid = utils.make_image_grid(images)
         buttons = utils.make_buttons_row(state)
 
@@ -39,4 +38,4 @@ def get_view(state: State, page: Page) -> View:
 
     # Save the function so that we can use it for redrawing the screen after changing the language or shuffling the same puzzle
     state.refresh_ui = build_puzzle
-    return utils.make_view(container)
+    return View(controls=[container])

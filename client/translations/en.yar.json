@@ -5,7 +5,7 @@
   "exception.server.connection.error": "Arrr, can’t be connectin’ to the server 🦜, matey!",
   "exception.verification.inexistent": "No booty result returned by the ship ⚓",
   "exception.verification.invalid": "That be a cursed result sent by the server 🦜",
-  "ui.button.verify": "Check yer answer",
+  "ui.button.verify": "Verify",
   "ui.popup.correct.button": "Back to the main deck ⚓",
   "ui.popup.correct.title": "Ye be human, arr! ✔️",
   "ui.popup.incorrect.button": "Try another riddle 🧩, ye scallywag",

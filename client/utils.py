@@ -18,24 +18,23 @@ from flet import (
     Column,
     Container,
     Control,
-    CrossAxisAlignment,
     FilterQuality,
     GestureDetector,
     GridView,
     Image,
-    MainAxisAlignment,
     Padding,
     RoundedRectangleBorder,
     Row,
     Text,
     TextButton,
     Theme,
-    View,
     Icons,
     IconData,
     IconButton,
     IconButtonTheme,
-    VisualDensity,
+    TextStyle,
+    FontWeight,
+    Alignment,
 )
 
 
@@ -93,11 +92,6 @@ def make_shadow(light: bool) -> BoxShadow:
     return BoxShadow(blur_radius=blur_radius, color=color)
 
 
-def make_view(container: Column) -> View:
-    padding = Padding(top=60)
-    return View(controls=[container], padding=padding)
-
-
 def make_button_image(
     function: Callable,
     url: str,
@@ -126,8 +120,9 @@ def make_button_image(
 def make_button_text(function: Callable, text: str) -> Container:
     button = Button(content=text, on_click=function)
     return Container(
-        border_radius=999,  # Buttons should be rounded along with their dropshadows
+        border_radius=64,  # Buttons should be rounded along with their dropshadows
         content=button,
+        height=64,
         shadow=make_shadow(True),
     )
 
@@ -135,29 +130,38 @@ def make_button_text(function: Callable, text: str) -> Container:
 def make_button_icon(function: Callable, icon: IconData) -> Container:
     button = IconButton(icon=icon, on_click=function)
     return Container(
-        border_radius=999,  # Buttons should be rounded along with their dropshadows
+        border_radius=64,  # Buttons should be rounded along with their dropshadows
         content=button,
+        height=64,
         shadow=make_shadow(True),
     )
 
 
 def make_buttons_row(state: State) -> Row:
-    settings = make_button_icon(state.show_popup_settings, Icons.SETTINGS)
-    reset = make_button_icon(state.reset, Icons.REFRESH)
-    info = make_button_icon(state.show_popup_info, Icons.INFO)
+    settings = make_button_icon(state.show_popup_settings, Icons.LANGUAGE_OUTLINED)
+    reset = make_button_icon(state.reset, Icons.REFRESH_OUTLINED)
+    info = make_button_icon(state.show_popup_info, Icons.INFO_OUTLINED)
     verify = make_button_text(state.verify_answer, state.texts["ui.button.verify"])
+    spacer = Container(expand=True)
+
     return Row(
-        alignment=MainAxisAlignment.CENTER,
-        controls=[settings, reset, info, verify],
+        controls=[reset, info, settings, spacer, verify],
         spacing=20,
     )
 
 
-def make_elements_column_grid(title: Text, grid: Container, buttons: Row) -> Column:
-    return Column(
+def make_elements_column_grid(title: Text, grid: Container, buttons: Row) -> Container:
+    column = Column(
         controls=[title, grid, buttons],
-        horizontal_alignment=CrossAxisAlignment.CENTER,
         spacing=40,
+        width=400,
+    )
+    padding = Padding(top=50)
+
+    return Container(
+        alignment=Alignment.CENTER,
+        content=column,
+        padding=padding,
     )
 
 
@@ -173,11 +177,14 @@ def make_image_grid(images: list[Control]) -> Container:
     return Container(
         border_radius=48,
         padding=30,
-        width=380,
         bgcolor=Colors.WHITE,
         content=grid,
         shadow=make_shadow(True),
     )
+
+
+def make_title(text: str) -> Text:
+    return Text(text, weight=FontWeight.W_500, size=24)
 
 
 # Create a list of buttons from the given list of filenames that exist on the server
@@ -205,12 +212,15 @@ def make_theme() -> Theme:
     color_scheme = ColorScheme(
         primary=Colors.BLACK,  # FG COLOR
     )
+
+    text_style = TextStyle(size=20, weight=FontWeight.W_500)
     button_style = ButtonStyle(
         bgcolor="#CECECE",  # Make the buttons visible without elevation
         elevation=0,  # Skeuomorphism not welcome here
-        padding=26,  # Make the buttons larger
-        visual_density=VisualDensity.STANDARD,  # Makes the icon buttons and textual buttons the same size for some reason
+        icon_size=32,
+        padding=16,  # Make the buttons larger
         shape=RoundedRectangleBorder(),  # Make buttons rectangle since we'll be rounding them with the shadow
+        text_style=text_style,  # Make the button text more bold and larger
     )
     button_theme = ButtonTheme(button_style)
     icon_button_theme = IconButtonTheme(button_style)

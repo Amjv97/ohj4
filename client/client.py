@@ -27,6 +27,7 @@ def app(page: Page) -> None:
         page.views = [view]
         page.update()
 
+    page.title = "Captcha"
     page.theme = utils.make_theme()
     page.theme_mode = ThemeMode.LIGHT
     page.window.height = 750
