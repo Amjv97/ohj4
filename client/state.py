@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from flet import Page, AlertDialog, Text, TextButton, Column, Control
+from flet import Page
 from functools import partial
 from pathlib import Path
 from puzzle import PUZZLE
@@ -77,54 +77,12 @@ class State:
         self.seed = response["seed"]
         self.selected = set()
 
-    # Helper function for creating popups with a title and a button. Content is optional
-    def show_popup(
-        self,
-        function: Callable,
-        title_text: str,
-        button_text: str,
-        content_text: str | None = None,
-        modal: bool = False,
-    ) -> None:
-        title = Text(title_text)
-        content = Text(content_text) if content_text else None
-        action = TextButton(button_text, on_click=function)
-        dialog = AlertDialog(
-            modal=modal,
-            title=title,
-            content=content,
-            actions=[action],
-        )
-
-        self.page.show_dialog(dialog)
-
-    # Helper function for creating popups with a title and multiple buttons
-    def show_popup_multiaction(
-        self,
-        functions: list[Callable],
-        title_text: str,
-        button_texts: list[str],
-        modal: bool = False,
-    ) -> None:
-        title = Text(title_text)
-        actions: list[Control] = [
-            TextButton(button_text, on_click=function)
-            for function, button_text in zip(functions, button_texts)
-        ]
-        content = Column(actions)
-        dialog = AlertDialog(
-            modal=modal,
-            title=title,
-            content=content,
-        )
-
-        self.page.show_dialog(dialog)
-
     # The popup that is shown when the user submits the correct answer
     def show_popup_correct(self) -> None:
         title = self.texts["ui.popup.correct.title"]
         button = self.texts["ui.popup.correct.button"]
-        self.show_popup(self.exit, title, button, modal=True)
+        dialog = utils.make_dialog(self.exit, title, button, modal=True)
+        self.page.show_dialog(dialog)
 
     # The popup that is shown when the user submits the incorrect answer
     def show_popup_incorrect(self) -> None:
@@ -139,14 +97,16 @@ class State:
 
         title = self.texts[title_path]
         button = self.texts[button_path]
-        self.show_popup(function, title, button, modal=True)
+        dialog = utils.make_dialog(function, title, button, modal=True)
+        self.page.show_dialog(dialog)
 
     # The popup that is shown when the user activates the information menu
     def show_popup_info(self) -> None:
         title = self.texts["ui.popup.info.title"]
         content = self.texts["ui.popup.info.content"]
         button = self.texts["ui.popup.info.button"]
-        self.show_popup(self.hide_popup, title, button, content)
+        dialog = utils.make_dialog(self.hide_popup, title, button, content)
+        self.page.show_dialog(dialog)
 
     # The popup that is shown when the user activates the settings menu
     def show_popup_settings(self) -> None:
@@ -160,7 +120,8 @@ class State:
             else []
         )
 
-        self.show_popup_multiaction(functions, title, buttons)
+        dialog = utils.make_dialog_multiaction(functions, title, buttons)
+        self.page.show_dialog(dialog)
 
     async def exit(self) -> None:
         await self.page.window.close()

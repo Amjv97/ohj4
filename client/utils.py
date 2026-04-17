@@ -1,3 +1,4 @@
+from collections.abc import Callable
 import requests
 import json
 from functools import partial
@@ -22,7 +23,52 @@ from flet import (
     Container,
     BoxShadow,
     Colors,
+    AlertDialog,
+    TextButton,
 )
+
+
+# Helper function for creating popups with a title and multiple buttons
+def make_dialog_multiaction(
+    functions: list[Callable],
+    title_text: str,
+    button_texts: list[str],
+    modal: bool = False,
+    tight: bool = True,
+) -> AlertDialog:
+    title = Text(title_text)
+    actions: list[Control] = [
+        TextButton(button_text, on_click=function)
+        for function, button_text in zip(functions, button_texts)
+    ]
+    content = Column(
+        controls=actions,
+        tight=tight,  # Don't let the dialog grow vertically to infinitum
+    )
+    return AlertDialog(
+        modal=modal,
+        title=title,
+        content=content,
+    )
+
+
+# Helper function for creating popups with a title and a button. Content is optional
+def make_dialog(
+    function: Callable,
+    title_text: str,
+    button_text: str,
+    content_text: str | None = None,
+    modal: bool = False,
+) -> AlertDialog:
+    title = Text(title_text)
+    content = Text(content_text) if content_text else None
+    action = TextButton(button_text, on_click=function)
+    return AlertDialog(
+        modal=modal,
+        title=title,
+        content=content,
+        actions=[action],
+    )
 
 
 def make_button(
@@ -77,7 +123,7 @@ def make_elements_column_grid(title: Text, grid: GridView, buttons: Row) -> Colu
 
 
 def make_image_grid(images: list[Control]) -> Container:
-    spacing=20
+    spacing = 20
     grid = GridView(
         runs_count=3,
         controls=images,
