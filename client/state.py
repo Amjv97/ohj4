@@ -13,6 +13,7 @@ class State:
     host: str
     language: str
     page: Page
+    popup_shown: bool
     port: int
     puzzle: PUZZLE
     refresh_ui: Callable
@@ -27,6 +28,7 @@ class State:
         self.selected = set()
         self.texts = dict()
         self.result = False
+        self.popup_shown = False
         self.retries = retries
 
     def get_url(self) -> str:
@@ -84,6 +86,8 @@ class State:
         title = self.texts["ui.popup.correct.title"]
         button = self.texts["ui.popup.correct.button"]
         dialog = utils.make_dialog(self.exit, title, button, modal=True)
+
+        self.popup_shown = True
         self.page.show_dialog(dialog)
 
     # The popup that is shown when the user submits the incorrect answer
@@ -100,6 +104,8 @@ class State:
         title = self.texts[title_path]
         button = self.texts[button_path]
         dialog = utils.make_dialog(function, title, button, modal=True)
+
+        self.popup_shown = True
         self.page.show_dialog(dialog)
 
     # The popup that is shown when the user activates the information menu
@@ -108,6 +114,8 @@ class State:
         content = self.texts[f"ui.popup.info.content.{self.puzzle}"]
         button = self.texts["ui.popup.info.button"]
         dialog = utils.make_dialog(self.hide_popup, title, button, content)
+
+        self.popup_shown = True
         self.page.show_dialog(dialog)
 
     # The popup that is shown when the user activates the settings menu
@@ -123,12 +131,15 @@ class State:
         )
 
         dialog = utils.make_dialog_multiaction(functions, title, buttons)
+
+        self.popup_shown = True
         self.page.show_dialog(dialog)
 
     async def exit(self) -> None:
         await self.page.window.close()
 
     def hide_popup(self) -> None:
+        self.popup_shown = False
         self.page.pop_dialog()
 
     # When exiting the settings menu, we need to also update the language along with refreshing the UI

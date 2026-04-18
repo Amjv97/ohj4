@@ -1,4 +1,4 @@
-from flet import Page, ThemeMode
+from flet import Page, ThemeMode, KeyboardEvent
 from puzzles import picture_selection
 from puzzles import shape_recognition
 from puzzles import tetris
@@ -11,6 +11,14 @@ state = State()
 
 
 def app(page: Page) -> None:
+    def on_keyboard_event(event: KeyboardEvent) -> None:
+        if state.popup_shown or event.key != "Enter" or not event.ctrl:
+            return
+
+        # Verify the answer if no dialog is shown using CTRL+Enter
+        # Can't override Enter directly as it handles selection along with space
+        state.verify_answer()
+
     def on_route_change() -> None:
         match page.route:
             case "/picture_selection":
@@ -35,6 +43,7 @@ def app(page: Page) -> None:
     page.window.min_height = page.window.height
     page.window.min_width = page.window.width
     page.on_route_change = on_route_change
+    page.on_keyboard_event = on_keyboard_event
 
     state.page = page
     state.change_puzzle()  # Open the given puzzle at startup
