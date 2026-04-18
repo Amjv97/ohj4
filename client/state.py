@@ -19,7 +19,7 @@ class State:
     result: bool
     retries: int
     seed: int
-    selected: set
+    selected: set[int]
     texts: dict[str, str]
     version: int
 
@@ -213,3 +213,6 @@ class State:
         texts = self.read_language_file(self.language)
         if texts:
             self.texts |= texts
+
+        # We need to clear selections since Flet removes our selection indicator on refresh
+        self.selected = set()

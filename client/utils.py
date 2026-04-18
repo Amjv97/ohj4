@@ -97,7 +97,7 @@ def make_button_image(
         checkmark_icon,
         bgcolor=COLORS.BACKGROUND_PRIMARY,
         border_radius=64,
-        offset=Offset(-0.25, -0.25),
+        offset=Offset(0.1, 0.1),
         padding=-4,
         shadow=make_shadow(),
         visible=False,  # Invisible by default
@@ -108,18 +108,24 @@ def make_button_image(
         fade_in_animation=Animation(300, AnimationCurve.LINEAR),
         filter_quality=FilterQuality.HIGH,  # Increases the sharpness by a noticable amount
     )
-    button = Button(
+    image_container = Container(
         image,
-        on_click=partial(function, id, checkmark),
-        style=ButtonStyle(padding=0),
-    )
-    container = Container(
-        button,
-        border_radius=24,
+        border_radius=20,
         shadow=make_shadow(),
     )
+    button = Button(
+        image_container,
+        aspect_ratio=1,
+        bgcolor=COLORS.BACKGROUND_SECONDARY,  # Make the background invisible unless focused
+        on_click=partial(function, id, checkmark),
+        elevation=0,
+    )
+    button_container = Container(
+        button,
+        border_radius=36,
+    )
 
-    return Stack([container, checkmark])
+    return Stack([button_container, checkmark])
 
 
 def make_button_text(
@@ -183,14 +189,14 @@ def make_image_grid(images: list[Control]) -> Container:
     grid = GridView(
         images,
         runs_count=3,
-        run_spacing=20,
-        spacing=20,
+        run_spacing=0,
+        spacing=0,
     )
 
     return Container(
         grid,
         border_radius=48,
-        padding=30,
+        padding=15,
         bgcolor=COLORS.BACKGROUND_SECONDARY,
         shadow=make_shadow(),
     )
