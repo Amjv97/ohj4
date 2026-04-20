@@ -24,7 +24,7 @@ def parse() -> tuple[str, int, str|None]:
 
     arguments = parser.parse_args()
     address = arguments.address or "127.0.0.1"
-    port = arguments.port or 41337
+    port = int(arguments.port or 41337)
     language = arguments.language
 
     return address, port, language
