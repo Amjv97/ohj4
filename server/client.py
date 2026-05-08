@@ -39,7 +39,7 @@ class Client:
     def get_random_puzzle(self) -> PUZZLE:
         match self.version:
             case 0:
-                puzzles = [PUZZLE.PICTURE_SELECTION]
+                puzzles = [PUZZLE.PICTURE_SELECTION,PUZZLE.SHAPE_RECOGNITION]
             case 1:
                 puzzles = [PUZZLE.PICTURE_SELECTION, PUZZLE.TETRIS]
             case 2:

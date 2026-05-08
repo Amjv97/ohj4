@@ -121,5 +121,24 @@
       "116.jpg",
       "117.jpg"
     ]
+ 
+  },
+
+
+  "shape_recognition": {
+    "correct":[
+      "122.jpg",
+      "123.jpg"
+
+    ],
+    "incorrect":[
+      "124.jpg",
+      "125.jpg",
+      "126.jpg",
+      "127.jpg",
+      "119.jpg",
+      "120.jpg",
+      "121.jpg"
+    ]
   }
 }
