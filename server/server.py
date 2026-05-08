@@ -59,6 +59,13 @@ def run(host: str, port: int) -> None:
                 incorrect = [int(i.split(".")[0]) for i in files["incorrect"]]
                 options = rng.sample(correct + incorrect, 9)
                 return set(i for i in options if i in correct)
+            case PUZZLE.SHAPE_RECOGNITION:
+                files = assets["shape_recognition"]
+                correct = [int(i.split(".")[0]) for i in files["correct"]]
+                incorrect = [int(i.split(".")[0]) for i in files["incorrect"]]
+                options = rng.sample(correct + incorrect, 9)
+                return set(i for i in options if i in correct)
+
             case _:
                 raise HTTPException(status_code=400, detail="Invalid puzzle provided")
 
