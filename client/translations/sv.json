@@ -14,7 +14,6 @@
   "ui.popup.info.button": "Tillbaka till pusslet",
   "ui.popup.info.content.PUZZLE.PICTURE_SELECTION": "Välj alla bilder som innehåller minst en politiker. Politikern kan vara från vilken jurisdiktion som helst. Avlidna och före detta politiker räknas också.\n\nPusslet kan innehålla mellan 0 och 9 politiker totalt.",
   "ui.popup.info.content.PUZZLE.SHAPE_RECOGNITION": "Välj alla former som matchar de angivna kriterierna. Du måste också välja former som är delvis dolda av kanterna, eftersom deras form kan gissas även med begränsad information.",
-  "ui.popup.info.content.PUZZLE.TETRIS": "Spela Tetris tills du har fyllt fyra rader med block. Du kan använda piltangenterna för att flytta blocken och X-tangenten för att rotera blocket.\n\nNär kriterierna är uppfyllda tas du automatiskt tillbaka till huvudapplikationen.",
   "ui.popup.info.content.PUZZLE.TEXT_RECOGNITION": "Försök skriva det som står i den visade bilden. Du bör inte ta hänsyn till störningar som linjer och former som inte liknar något tecken i det engelska alfabetet.",
   "ui.popup.info.title": "Information",
   "ui.popup.settings.title": "Välj språk",

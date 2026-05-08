@@ -1,3 +1,5 @@
+from puzzle import PUZZLE
+from urllib3.util.connection import _set_socket_options
 import requests
 import json
 from collections.abc import Callable
@@ -9,6 +11,9 @@ from urllib import request
 from flet import (
     AlertDialog,
     Animation,
+    Dropdown,
+    DropdownOption,
+    Event,
     AnimationCurve,
     BoxShadow,
     Button,
@@ -158,16 +163,47 @@ def make_button_icon(function: Callable, icon: IconData) -> Container:
     )
 
 
+def make_dropdown(
+    function: Callable, icon: IconData, puzzle_current: PUZZLE
+) -> Container:
+    def call(e: Event[Dropdown]) -> None:
+        request = int(e.control.value or "0")
+        function(request)
+
+    puzzles = [
+        "Picture selection",
+        "Shape recognition",
+        "Text recognition",
+    ]
+
+    dropdown = Dropdown(
+        "Choose the puzzle",
+        on_select=call,
+        hint_text=puzzles[puzzle_current.value],
+        options=[
+            DropdownOption("0", puzzles[0]),
+            DropdownOption("1", puzzles[1]),
+            DropdownOption("2", puzzles[2]),
+        ],
+    )
+    return Container(
+        dropdown,
+        width=128,
+        height=64,
+        shadow=make_shadow(),
+    )
+
+
 def make_buttons_row(state: State) -> Row:
     settings = make_button_icon(state.show_popup_settings, Icons.LANGUAGE_OUTLINED)
-    reset = make_button_icon(state.reset, Icons.REFRESH_OUTLINED)
+    reset = make_dropdown(state.reset, Icons.REFRESH_OUTLINED, state.puzzle)
     info = make_button_icon(state.show_popup_info, Icons.INFO_OUTLINED)
     verify = make_button_text(state.verify_answer, state.texts["ui.button.verify"])
     spacer = Container(expand=True)
 
     return Row(
         [reset, info, settings, spacer, verify],
-        spacing=20,
+        spacing=10,
     )
 
 

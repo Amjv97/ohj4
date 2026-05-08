@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 
-def parse() -> tuple[str, int, str|None]:
+def parse() -> tuple[str, int, str | None]:
     parser = ArgumentParser(
         prog="CaptchaClient",
         description="A client that connects to the Captcha server and displays a puzzle to the user. Upon completion, the client either relays the user back to the main application or alternatively makes the user try another puzzle if the provided solution was incorrect.",

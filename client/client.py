@@ -54,7 +54,7 @@ def run(host: str, port: int, language: str | None, version: int) -> bool:
     state.port = port
     state.version = version
     state.update_language(language)
-    state.request_new_puzzle()
+    state.request_new_puzzle(None)
     flet.app(target=app)
 
     # Return the result of the puzzle (correct/incorrect)

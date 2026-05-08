@@ -14,7 +14,6 @@
   "ui.popup.info.button": "Takaisin pulmaan",
   "ui.popup.info.content.PUZZLE.PICTURE_SELECTION": "Valitse kaikki kuvat, joissa on vähintään yksi poliitikko. Poliitikko voi olla mistä tahansa maasta tai hallintoalueelta. Myös kuolleet ja entiset poliitikot lasketaan mukaan.\n\nTehtävässä voi olla yhteensä 0–9 poliitikkoa.",
   "ui.popup.info.content.PUZZLE.SHAPE_RECOGNITION": "Valitse kaikki muodot, jotka vastaavat annettuja kriteerejä. Sinun tulee myös valita muodot, jotka ovat osittain rajojen peitossa, koska niiden muoto voidaan päätellä rajallisesta tiedosta huolimatta.",
-  "ui.popup.info.content.PUZZLE.TETRIS": "Pelaa Tetristä, kunnes olet täyttänyt neljä riviä palikoilla. Voit käyttää nuolinäppäimiä palikoiden liikuttamiseen ja X-näppäintä palikan kääntämiseen.\n\nKun ehdot täyttyvät, sinut palautetaan automaattisesti pääsovellukseen.",
   "ui.popup.info.content.PUZZLE.TEXT_RECOGNITION": "Yritä kirjoittaa, mitä kuvassa lukee. Älä huomioi häiriötekijöitä, kuten viivoja ja muotoja, jotka eivät muistuta mitään englannin aakkosten merkkiä.",
   "ui.popup.info.title": "Tietoa",
   "ui.popup.settings.title": "Valitse kieli",

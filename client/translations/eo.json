@@ -14,7 +14,6 @@
   "ui.popup.info.button": "Reen al la puzlo",
   "ui.popup.info.content.PUZZLE.PICTURE_SELECTION": "Elektu ĉiujn bildojn, kiuj enhavas almenaŭ unu politikiston. La politikisto povas esti el ajna jurisdikcio imagebla. Mortintaj kaj eksaj politikistoj ankaŭ validas.\n\nLa enigmo povas enhavi entute de 0 ĝis 9 politikistojn.",
   "ui.popup.info.content.PUZZLE.SHAPE_RECOGNITION": "Elektu ĉiujn formojn, kiuj kongruas kun la donitaj kriterioj. Vi ankaŭ devas elekti formojn parte kaŝitajn de la randoj, ĉar ilia formo povas esti divenata eĉ kun limigita informo.",
-  "ui.popup.info.content.PUZZLE.TETRIS": "Ludu Tetrison ĝis vi plenigis kvar vicojn per blokoj. Vi povas uzi la sagoklavojn por movi la blokojn kaj la klavon X por turni ilin.\n\nPost plenumo de la kriterioj, vi estos aŭtomate revenigita al la ĉefa aplikaĵo.",
   "ui.popup.info.content.PUZZLE.TEXT_RECOGNITION": "Provu skribi tion, kio estas skribita en la montrita bildo. Vi ne devas konsideri distraĵojn kiel liniojn kaj formojn, kiuj ne similas al literoj de la angla alfabeto.",
   "ui.popup.info.title": "Informo",
   "ui.popup.settings.title": "Elektu lingvon",

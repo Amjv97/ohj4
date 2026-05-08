@@ -2,7 +2,7 @@ import arguments
 import client
 import sys
 
-VERSION = 0
+VERSION = 1
 
 if __name__ == "__main__":
     host, port, language = arguments.parse()

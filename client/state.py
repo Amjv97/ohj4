@@ -66,9 +66,11 @@ class State:
                 raise Exception(self.texts["exception.verification.invalid"])
 
     # Ask the server for a new puzzle and set it as active
-    def request_new_puzzle(self) -> None:
+    def request_new_puzzle(self, request: int | None) -> None:
         url = self.get_url() + "get_puzzle"
         data = {"version": self.version}
+        if request:
+            data["request"] = request
         response = utils.try_send(url, data)
 
         if not response:
@@ -154,9 +156,9 @@ class State:
         self.hide_popup()
 
     # Changing the active puzzle by requesting a new one and switching to it
-    def reset(self) -> None:
+    def reset(self, request: int | None = None) -> None:
         puzzle_old = self.puzzle
-        self.request_new_puzzle()
+        self.request_new_puzzle(request)
 
         if puzzle_old == self.puzzle:
             # We need to refresh, since the new seed needs to be taken into account
@@ -172,8 +174,6 @@ class State:
         match self.puzzle:
             case PUZZLE.PICTURE_SELECTION:
                 route = "/picture_selection"
-            case PUZZLE.TETRIS:
-                route = "/tetris"
             case PUZZLE.TEXT_RECOGNITION:
                 route = "/text_recognition"
             case PUZZLE.SHAPE_RECOGNITION:

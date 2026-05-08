@@ -14,7 +14,6 @@
   "ui.popup.info.button": "Back to puzzle",
   "ui.popup.info.content.PUZZLE.PICTURE_SELECTION": "Select all of the pictures that contain at least one politican in them. The politican can be from any jurisdiction imagineable. Deceased and ex-politicans count as well.\n\nThe puzzle may contain anywhere from 0 to 9 politicans in total.",
   "ui.popup.info.content.PUZZLE.SHAPE_RECOGNITION": "Select all of the shapes that match the given criteria. You'll also need to select shapes that are partly hidden by the boundaries, since their shape can be guessed even with the limited information.",
-  "ui.popup.info.content.PUZZLE.TETRIS": "Play Tetris until you have filled four rows with blocks. You can use the arrow keys to move the blocks and the X key to rotate the block.\n\nCompleting the criteria will automatically take you back to the main application.",
   "ui.popup.info.content.PUZZLE.TEXT_RECOGNITION": "Try to write what's written in the shown image. You should not take into account the distractions such as the lines and shapes that don't resemble any character in the English alphabet.",
   "ui.popup.info.title": "Information",
   "ui.popup.settings.title": "Select language",

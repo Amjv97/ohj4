@@ -19,7 +19,8 @@ class Clients:
     def add_client(self, request: Request, data: dict) -> Client:
         host = request.client.host  # ty:ignore[unresolved-attribute]
         version = data["version"] if "version" in data else -1
-        client = Client(version)
+        puzzle = data["request"] if "request" in data else -1
+        client = Client(version, puzzle)
         self.clients[host] = client
         return client
 
@@ -30,24 +31,26 @@ class Client:
     seed: int
     version: int
 
-    def __init__(self, version: int) -> None:
+    def __init__(self, version: int, puzzle: int) -> None:
         self.version = version
-        self.puzzle = self.get_random_puzzle()
+        self.puzzle = self.get_random_puzzle(puzzle)
         self.seed = self.get_random_seed()
 
     # Based on the version provided by the client, choose a random puzzle from the list of supported puzzles for that version
-    def get_random_puzzle(self) -> PUZZLE:
+    def get_random_puzzle(self, puzzle: int) -> PUZZLE:
+        if puzzle != -1:
+            return PUZZLE(puzzle)
+
         match self.version:
             case 0:
-                puzzles = [PUZZLE.PICTURE_SELECTION,PUZZLE.SHAPE_RECOGNITION]
+                puzzles = [PUZZLE.PICTURE_SELECTION]
             case 1:
-                puzzles = [PUZZLE.PICTURE_SELECTION, PUZZLE.TETRIS]
+                puzzles = [PUZZLE.PICTURE_SELECTION, PUZZLE.SHAPE_RECOGNITION]
             case 2:
                 puzzles = [
                     PUZZLE.PICTURE_SELECTION,
-                    PUZZLE.TETRIS,
-                    PUZZLE.TEXT_RECOGNITION,
                     PUZZLE.SHAPE_RECOGNITION,
+                    PUZZLE.TEXT_RECOGNITION,
                 ]
             case _:
                 raise HTTPException(status_code=400, detail="Unsupported version")
